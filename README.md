@@ -22,7 +22,9 @@ currently hard coded to work with my set only, Ill fix that in a future update
 
 # Installing
 
-**https://github.com/milaq/rpi-rf**
+**RPI-rf**
+
+https://github.com/milaq/rpi-rf
 This is the program I use to send rf signals. it really simplifys the process, and it works great.
 install it with : 
 ```
@@ -31,25 +33,29 @@ sudo pip3 install rpi-rf
 ```
 
 **Flask**
+
 I use flask to host the webserver that I am running, because it is simple and works well for this small scale project
 install it  with :
 ```
 pip install Flask
 ```
-** RFSniffer **
+**RFSniffer**
+
 I use this program to find the frequency that your wifi remote is set to. With some outlets you can find out directly from
 the manufacterer, or even on the product it'sself, but for me, I used this program
 ```
 TODO Write/finish a better tutorial for this part
 ```
 
-** finishing up **
+**finishing up**
+
 Once you have all of this set up, you should be good to go, just run the program with 
 ```
 sudo python app.py
 ```
 
-** startup **
+**startup**
+
 One final thing to try is setting the program to run whenever the RPI restarts, so that it is always running ( barring a crash or internet outage)
 you can do this by editing your /etc/rc.local file with this line
 ```
