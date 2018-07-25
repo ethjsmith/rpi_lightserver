@@ -1,7 +1,8 @@
 from flask import Flask,redirect
-import subprocess
+import subprocess, config
 
-app = Flask(__name__,static_url_path="",static_folder='/home/pi/Webserver/')
+vars = config.config()
+app = Flask(__name__,static_url_path="",static_folder=vars[5])
 @app.route("/")
 
 def hello():
@@ -9,22 +10,22 @@ def hello():
 
 @app.route('/on')
 def l_on():
-	subprocess.call(['/usr/local/bin/rpi-rf_send','-g21','1655303'])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[1]])
 	return redirect('/')
 
 @app.route('/off')
 def l_off():
-	subprocess.call(['/usr/local/bin/rpi-rf_send','-g21','1655302'])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[2]])
 	return redirect('/')
 
 @app.route('/on1')
 def l_on1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send','-g21','6832647'])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[3]])
 	return redirect('/')
 
 @app.route('/off1')
 def l_off1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send','-g21','6832646'])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[4]])
 	return redirect('/')
 
 if __name__ == "__main__":
