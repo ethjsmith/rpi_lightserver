@@ -5,15 +5,20 @@ Now you can set it up yourself as well!, just follow the poorly written instruct
 
 # Hardware Requirements
 
-**A raspberry PI **
+**A raspberry PI**
+
 pi3 perferred but should work with pi2 as well 
 
-**RF transmitter and reciver ** 
+**RF transmitter and reciver** 
+
 here is the stuff that I am using in this project. you do need the receiver in order to find your outlet's frequency
+
 https://www.amazon.com/gp/product/B017AYH5G0/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1
  
-** wireless outlet **
+**wireless outlet**
+
 These are the outlets I am using, although this project should work for any 433mhz outlet
+
 https://www.amazon.com/gp/product/B01FHIG5GW/ref=oh_aui_detailpage_o01_s00?ie=UTF8&psc=1
 
 you will need to find the RF frequency of your outlets. to do this, I used an
@@ -25,6 +30,7 @@ currently hard coded to work with my set only, Ill fix that in a future update
 **RPI-rf**
 
 https://github.com/milaq/rpi-rf
+
 This is the program I use to send rf signals. it really simplifys the process, and it works great.
 install it with : 
 ```
