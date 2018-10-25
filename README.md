@@ -41,9 +41,10 @@ sudo pip3 install rpi-rf
 **Flask**
 
 I use flask to host the webserver that I am running, because it is simple and works well for this small scale project
-install it  with :
+install it  with : ( now also install basicauth, which allows you to log into the webserver, making it safer to be exposed to the outside world ) install with : 
 ```
 pip install Flask
+pip install Flask-BasicAuth
 ```
 **RFSniffer**
 

@@ -9,5 +9,6 @@ def config():
 	outlet2on = 6832647
 	outlet2off = 6832646
 	# The path to where your webserver is being sent from. this is generally the location that this file currently is
-	path_to_webserver = '/home/pi/rpi_lightserver/'
-	return rpi_gpio_pin,outlet1on,outlet1off,outlet2on,outlet2off,path_to_webserver
+	# This variable has been replaced by something better, but I'll keep it here for now
+	#path_to_webserver = '/home/ejsmith/Documents/test/rpi_lightserver/'
+	return rpi_gpio_pin,outlet1on,outlet1off,outlet2on,outlet2off
