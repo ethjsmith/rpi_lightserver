@@ -3,46 +3,43 @@ from flask_basicauth import BasicAuth
 import subprocess, config, os
 
 vars = config.config()
-#app = Flask(__name__,static_url_path="",static_folder=vars[5])
-app = Flask(__name__,static_url_path="",static_folder=os.path.dirname(os.path.realpath(__file__)))
+v0 = '-g ' + str(vars[0])
+v1 = str(vars[1])
+v2 = str(vars[2])
+v3 = str(vars[3])
+v4 = str(vars[4])
+
+app = Flask(__name__,static_url_path="",static_folder='/home/pi/rpi_lightserver/')
 
 app.config['BASIC_AUTH_USERNAME'] = 'ejsmith'
-app.config['BASIC_AUTH_PASSWORD'] = 'password'
+app.config['BASIC_AUTH_PASSWORD'] = 'root'
 app.config['BASIC_AUTH_FORCE'] = True
 
 basic_auth = BasicAuth(app)
 
-@app.route("/")
-@basic_auth.required
+#print vars[0],vars[1],vars[2],vars[3]
+@app.route('/')
 def hello():
 	return app.send_static_file('index.html')
-
 @app.route('/on')
-@basic_auth.required
-
 def l_on():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[1]])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v1])
 	return redirect('/')
 
 @app.route('/off')
-@basic_auth.required
 def l_off():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[2]])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v2])
 	return redirect('/')
 
 @app.route('/on1')
-@basic_auth.required
-
 def l_on1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[3]])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v3])
 	return redirect('/')
 
 @app.route('/off1')
-@basic_auth.required
 def l_off1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',vars[0],vars[4]])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v4])
 	return redirect('/')
-
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port = 80)
+	app.run(debug=True, host='0.0.0.0', port = 80)
 
