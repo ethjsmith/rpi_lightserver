@@ -8,8 +8,8 @@ v1 = str(vars[1])
 v2 = str(vars[2])
 v3 = str(vars[3])
 v4 = str(vars[4])
-
-app = Flask(__name__,static_url_path="",static_folder='/home/pi/rpi_lightserver/')
+folder = os.path.dirname(os.path.realpath(__file__))
+app = Flask(__name__,static_url_path="",static_folder=folder)
 
 app.config['BASIC_AUTH_USERNAME'] = 'ejsmith'
 app.config['BASIC_AUTH_PASSWORD'] = 'root'

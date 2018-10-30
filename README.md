@@ -46,6 +46,13 @@ install it  with : ( now also install basicauth, which allows you to log into th
 pip install Flask
 pip install Flask-BasicAuth
 ```
+
+** uWSGI **
+
+uWSGI is used as a better webserver. flask's internal server is really only meant for testing, while this one is better for a production environment, like 
+the site that is open to the world...
+` pip install uwsgi `
+
 **RFSniffer**
 
 I use this program to find the frequency that your wifi remote is set to. With some outlets you can find out directly from
