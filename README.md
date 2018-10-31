@@ -75,3 +75,11 @@ you can do this by editing your /etc/rc.local file with this line
 ```
  TODO add the line here
 ```
+
+
+some additional stuff ( alot of this has to change soon )
+
+you can now install all dependancies with quickstart.sh
+
+now using wsgi instead of naked flask, you can start the server with 
+`./start.sh` and also add that script to startup for the file to start automatically :) 
