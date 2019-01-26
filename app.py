@@ -11,58 +11,70 @@ v2 = str(vars[2])
 v3 = str(vars[3])
 v4 = str(vars[4])
 folder = os.path.dirname(os.path.realpath(__file__))
-app = Flask(__name__,static_url_path="",static_folder=folder)
+ap = Flask(__name__,static_url_path="",static_folder=folder)
 
-app.config['BASIC_AUTH_USERNAME'] = 'ejsmith_user'
-app.config['BASIC_AUTH_PASSWORD'] = '@allianceWithTheBlackHole11'
-app.config['BASIC_AUTH_FORCE'] = True
+# ap.config['BASIC_AUTH_FORCE'] = True
 
-basic_auth = BasicAuth(app)
+basic_auth = BasicAuth(ap)
 
 #print vars[0],vars[1],vars[2],vars[3]
-@app.route('/')
+@ap.route('/')
 def hello():
-	return app.send_static_file('index.html')
-@app.route('/on')
+	return ap.send_static_file('main.html')
+
+@ap.route('/control')
+@basic_auth.required
+def controller():
+	return ap.send_static_file('index.html')
+
+@ap.route('/control/on')
+@basic_auth.required
 def l_on():
 	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v1])
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/off')
+@ap.route('/control/off')
+@basic_auth.required
 def l_off():
 	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v2])
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/on1')
+@ap.route('/control/on1')
+@basic_auth.required
 def l_on1():
 	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v3])
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/off1')
+@ap.route('/control/off1')
+@basic_auth.required
 def l_off1():
 	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v4])
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/heatoff')
+@ap.route('/control/heatoff')
+@basic_auth.required
 def h_off():
 	r = requests.get('http://192.168.0.16/off')
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/heatlow')
+@ap.route('/control/heatlow')
+@basic_auth.required
 def h_low():
 	r = requests.get('http://192.168.0.16/low')
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/heatmid')
+@ap.route('/control/heatmid')
+@basic_auth.required
 def h_mid():
 	r = requests.get('http://192.168.0.16/mid')
-	return redirect('/')
+	return redirect('/control')
 
-@app.route('/heathigh')
+@ap.route('/control/heathigh')
+@basic_auth.required
 def h_high():
 	r = requests.get('http://192.168.0.16/high')
-	return redirect('/')
+	return redirect('/control')
 
 if __name__ == "__main__":
-	app.run(debug=True, host='0.0.0.0', port = 80)
+	ap.run(debug=True, host='0.0.0.0')
 
