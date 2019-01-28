@@ -3,6 +3,22 @@ the simple web server that runs on my raspberry pi, which controls my lights
 Now you can set it up yourself as well!, just follow the poorly written instructions below
 
 
+
+# Update 
+These instructions are now mostly out of date. there is a WIP `quickstart.sh` script, which when finished
+will install everything needed, but for now it would be pretty hard to build this project without some prior knowledge
+
+basically this is just a flask webserver, with some built in GPIO support, meant to run on a raspberry pi 
+
+
+# TODO : 
+add enviroment variables for username and password ( for sites basic auth ( for now those lines are just cut out of the program ) )
+clean up config file (config.py ) 
+improve the website section of the project ( make it a real site, not just 2 lines of placeholder text )
+add functionallity to the website ( like php for consistent topbars, and site navigation ) 
+clean up the readme beyond this point
+
+
 # Hardware Requirements
 
 **A raspberry PI**
