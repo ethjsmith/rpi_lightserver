@@ -13,6 +13,8 @@ v4 = str(vars[4])
 folder = os.path.dirname(os.path.realpath(__file__))
 ap = Flask(__name__,static_url_path="",static_folder=folder)
 
+ap.config['BASIC_AUTH_USERNAME'] = 'ejsmith_user'
+ap.config['BASIC_AUTH_PASSWORD'] = '@allianceWithTheBlackHole11'
 # ap.config['BASIC_AUTH_FORCE'] = True
 
 basic_auth = BasicAuth(ap)
