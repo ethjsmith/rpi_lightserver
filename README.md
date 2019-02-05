@@ -18,6 +18,16 @@ improve the website section of the project ( make it a real site, not just 2 lin
 add functionallity to the website ( like php for consistent topbars, and site navigation ) 
 clean up the readme beyond this point
 
+# credentials :
+for this project you need a file called "secret.py" in the same directory as the app.py, where you save the credentials. 
+this can be a very simple file, that looks something like this. 
+```
+def creds():
+	user = "username_here"	
+	passw = "password_here"
+	return user,passw
+```
+this will allow pages with basicauth to have credentials that aren't shared in the github ( as my .gitignore ignores the file "secret.py" ) 
 
 # Hardware Requirements
 

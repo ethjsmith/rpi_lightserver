@@ -1,7 +1,6 @@
 from flask import Flask,redirect
 from flask_basicauth import BasicAuth
-import subprocess, config, os, requests
-
+import subprocess, config, os, requests, secret
 
 
 vars = config.config()
@@ -13,8 +12,12 @@ v4 = str(vars[4])
 folder = os.path.dirname(os.path.realpath(__file__))
 ap = Flask(__name__,static_url_path="",static_folder=folder)
 
-ap.config['BASIC_AUTH_USERNAME'] = 'ejsmith_user'
-ap.config['BASIC_AUTH_PASSWORD'] = '@allianceWithTheBlackHole11'
+# you'll need to create a secret.py file which returns (username,password)
+# check the readme for more information about how to do this, with an example
+creds = secret.creds()
+ap.config['BASIC_AUTH_USERNAME'] = creds[0]
+ap.config['BASIC_AUTH_PASSWORD'] = creds[1]
+
 # ap.config['BASIC_AUTH_FORCE'] = True
 
 basic_auth = BasicAuth(ap)
