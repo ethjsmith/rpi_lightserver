@@ -1,24 +1,10 @@
-class Template:
-	# this file will contain the templates used to render each page on the website, so that it is all stored here, instead of in the "main" class
-	# general page template, which will make a page based on a name, and the content of the page
-	def page (self,name,content):
-		return "<html><head>" + self.stylesheet() + "<title>" + name + "</title></head><body>" + self.header() + "<h1>" + name + "</h1>" + content + "</body></html>"
-	def header(self):
-		return """<div class = "topnav">
-		<a href="/">Home</a>
-		<a href="/projects">Projects</a>
-		<a href="/misc">Misc</a>
-		<a href="/about">About</a>
-		<a href="/control">Admin</a>
-		</div>
-		"""
-	def stylesheet(self):
-		return """<link rel="stylesheet" href = "/style.css">"""
+class Content:
+	# this is the catchall, if your function doesn't exist
 	def error(self):
 		return """<div class = "card">
-		<p>sorry, the page you're looking for actually doesn't exist...
+		<p>Sorry, this page doesn't exist...
 		</p></div>"""
-
+	#everything else is just articles. 
 	def aoe(self):
 		return"""<div class = "card">
 		<h2> Age of Empires 2 </h2>
@@ -54,3 +40,4 @@ class Template:
 		definitely come back and finish this later ;)
 		</p></div>
 		"""	
+

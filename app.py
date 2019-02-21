@@ -1,6 +1,6 @@
 from flask import Flask,redirect
 from flask_basicauth import BasicAuth
-from resources import templates
+from resources import templates, content
 import subprocess, config, os, requests, secret
 
 
@@ -12,8 +12,14 @@ v3 = str(vars[3])
 v4 = str(vars[4])
 folder = os.path.dirname(os.path.realpath(__file__))
 ap = Flask(__name__,static_url_path="",static_folder=folder)
+
 # creates the template object
 templ = templates.Template()
+
+#also creates the cotent object
+cont = content.Content()
+
+
 # you'll need to create a secret.py file which returns (username,password)
 # check the readme for more information about how to do this, with an example
 creds = secret.creds()
@@ -56,7 +62,8 @@ def projects():
 def misc():
 	return '<html>' + stylesheet + header + '''<h1> Random Stuff </h1> <div class ="card">
 Probably I will just post about video games here or something... 
-<br><a href = "/misc/aoe">Age of Empires 2</a></div>
+<br><a href = "/misc/aoe">Age of Empires 2</a>
+<br><a href = "/misc/dishonored"> Dishonored</a></div>
 </html>'''
 # ap route for all the games under misc in route ? hopefully anyway! 
 @ap.route('/misc/<path:router>')
@@ -65,8 +72,8 @@ def misc_route(router):
 #		return templ.page(path,templ.templ.getattr(templ,path))
 #	else:
 #		return "No page found"
-	if getattr(templ,str(router),"error") != "error":
-		runme = getattr(templ,str(router),"error")
+	if getattr(cont,str(router),"error") != "error":
+		runme = getattr(cont,str(router),"error")
 		return templ.page(str(router),runme())
 	else:
 		return templ.page("error",templ.error())

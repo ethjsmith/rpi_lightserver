@@ -3,3 +3,4 @@ projectenv
 *.swp
 *.pyc
 secret.py
+*.save
