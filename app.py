@@ -1,6 +1,6 @@
 from flask import Flask,redirect
 from flask_basicauth import BasicAuth
-from resources import templates, content
+from resources import templates, miscContent
 import subprocess, config, os, requests, secret
 
 
@@ -17,7 +17,7 @@ ap = Flask(__name__,static_url_path="",static_folder=folder)
 templ = templates.Template()
 
 #also creates the cotent object
-cont = content.Content()
+mcont = miscContent.Misc_Content()
 
 
 # you'll need to create a secret.py file which returns (username,password)
@@ -58,28 +58,23 @@ def projects():
 	</body>
 </html>
 """
+# misc now dynamically reads in it's child articles, and creates a preview which links to each article.
 @ap.route('/misc')
 def misc():
-	return '<html>' + stylesheet + header + '''<h1> Random Stuff </h1> <div class ="card">
-Probably I will just post about video games here or something... 
-<br><a href = "/misc/aoe">Age of Empires 2</a>
-<br><a href = "/misc/dishonored"> Dishonored</a></div>
-</html>'''
+	body =  '<html>' + stylesheet + header + '''<h1> Random Stuff </h1> <div class ="card">
+The Misc page is home to anything that doesn't fit on any of the other pages. Reallistically I am probably just going to write about all my favorite video games here, but maybe
+ill throw in some other stuff about things that are happening in my life. don't keep your fingers crossed for that.</div><br> '''
+	body = body + templ.readContent(mcont) + "</html>"
+	return body
 # ap route for all the games under misc in route ? hopefully anyway! 
 @ap.route('/misc/<path:router>')
 def misc_route(router):
-#	if getattr(templ,path,"nope") != "nope" and getattr(templ,path,"nope") != page and getattr(templ,path,"nope") != header and getattr(templ,path,"nope") != stylesheet:
-#		return templ.page(path,templ.templ.getattr(templ,path))
+#	if getattr(mcont,str(router),"error") != "error":
+#		runme = getattr(mcont,str(router),"error")
+#		return templ.page(str(router),runme())
 #	else:
-#		return "No page found"
-	if getattr(cont,str(router),"error") != "error":
-		runme = getattr(cont,str(router),"error")
-		return templ.page(str(router),runme())
-	else:
-		return templ.page("error",templ.error())
-#@ap.route('/misc/aoe')
-#def misc_aoe():
-#	return templ.page("aoe",templ.aoe())
+#		return templ.page("error",templ.error())
+	return templ.generatePage(router,mcont)
 @ap.route('/about')
 def about():
 	return '<html>' + stylesheet + header + '''<h1> About Me</h1> <div class = "card">
