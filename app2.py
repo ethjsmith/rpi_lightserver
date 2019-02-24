@@ -39,9 +39,8 @@ basic_auth = BasicAuth(ap)
 def hello():
 	#return ap.send_static_file('main.html')
 	return ' <html><head>' + stylesheet +"""<title>Home</title></head>
-<body> """ + header + """ <h1> Homepage </h1><div class = "card">
-<p> Welcome to my cool site... coolness coming soon</p>
-<p> Ironically this page is the least cool... go check out the rest of the site!</p></div>
+<body> """ + header + """ <h1> Homepage </h1>
+<p class = "card"> Welcome to my cool site... coolness coming soon</p>
 </body>
 </html>"""
 
@@ -75,18 +74,17 @@ def misc_route(router):
 	return templ.generatePage(router,mcont)
 @ap.route('/blog')
 def blog():
-	body = '<html>' + stylesheet + header + '''<h1> A blog? or something</h1><div class = "card">
-	My life story up to this point... or at least some interesting stuff that I might write about from time to time</div><br>'''
+	body = '<html>' + stylesheet + header + '''<h1> A blog? or something</h1><div class = "card">'''
 	return body + templ.readContent(bcont,request.path) + "</html>"
-@ap.route('/blog/<path:router>')
+@ap.route('blog/<path:router>')
 def blog_route(router):
-	return templ.generatePage(router,bcont)
+	return templ.generatePage(router,bcount)
 @ap.route('/about')
 def about():
 	return '<html>' + stylesheet + header + '''<h1> About Me</h1> <div class = "card">
 My name is Ethan Smith, and I am a CSIS student at Southern Utah University.
 at SUU I am also the Vice President of the cyber defence (&competition ) club, and a
-student security analyst.<br> Contact me at `ethan@esmithy.net` </div>
+student security analyst.</div>
 </html>'''
 
 @ap.route('/control')
@@ -143,5 +141,5 @@ def h_high():
 	return redirect('/control')
 
 if __name__ == "__main__":
-	ap.run(debug=True, host='0.0.0.0')
+	ap.run()
 
