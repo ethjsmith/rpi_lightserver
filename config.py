@@ -1,7 +1,7 @@
 def config():
 	# this is the variables that need to be set
 	# This is the GPIO data pin that is connected to the RF sender module
-	rpi_gpio_pin = 21
+	rpi_gpio_pin = '21'
 	# These are the codes sent by the RPI to toggle lights
 	outlet1on = 1655303
 	outlet1off = 1655302
@@ -11,4 +11,4 @@ def config():
 	# The path to where your webserver is being sent from. this is generally the location that this file currently is
 	# This variable has been replaced by something better, but I'll keep it here for now
 	#path_to_webserver = '/home/ejsmith/Documents/test/rpi_lightserver/'
-	return rpi_gpio_pin,outlet1on,outlet1off,outlet2on,outlet2off
+	return [rpi_gpio_pin,outlet1on,outlet1off,outlet2on,outlet2off]

@@ -4,12 +4,9 @@ from resources import templates, miscContent, projectContent, blogContent
 import subprocess, config, os, requests, secret
 
 
-vars = config.config()
-v0 = '-g ' + str(vars[0])
-v1 = str(vars[1])
-v2 = str(vars[2])
-v3 = str(vars[3])
-v4 = str(vars[4])
+conf = config.config()
+conf[0] = '-g ' + conf[0]
+
 folder = os.path.dirname(os.path.realpath(__file__))
 ap = Flask(__name__,static_url_path="",static_folder=folder)
 
@@ -97,25 +94,25 @@ def controller():
 @ap.route('/control/on')
 @basic_auth.required
 def l_on():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v1])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[1]])
 	return redirect('/control')
 
 @ap.route('/control/off')
 @basic_auth.required
 def l_off():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v2])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[2]])
 	return redirect('/control')
 
 @ap.route('/control/on1')
 @basic_auth.required
 def l_on1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v3])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[3]])
 	return redirect('/control')
 
 @ap.route('/control/off1')
 @basic_auth.required
 def l_off1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',v0,v4])
+	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[4]])
 	return redirect('/control')
 
 @ap.route('/control/heatoff')
