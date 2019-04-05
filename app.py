@@ -13,7 +13,7 @@ ap = Flask(__name__,static_url_path="",static_folder=folder)
 # creates the template object
 templ = templates.Template()
 
-#also creates the cotent object
+#also creates the cotent objects
 mcont = miscContent.Misc_Content()
 pcont = projectContent.ProjectContent()
 bcont = blogContent.blogContent()
@@ -31,10 +31,8 @@ header = templ.header()
 stylesheet = templ.stylesheet()
 basic_auth = BasicAuth(ap)
 
-#print vars[0],vars[1],vars[2],vars[3]
 @ap.route('/')
-def hello():
-	#return ap.send_static_file('main.html')
+def homepage():
 	return ' <html><head>' + stylesheet +"""<title>Home</title></head>
 <body> """ + header + """ <h1> Homepage </h1><div class = "card">
 <p> Welcome to my cool site... coolness coming soon</p>
@@ -56,19 +54,12 @@ def projects_route(router):
 @ap.route('/misc')
 def misc():
 	body =  '<html>' + stylesheet + header + '''<h1> Random Stuff </h1> <div class ="card">
-The Misc page is home to anything that doesn't fit on any of the other pages. Reallistically I am probably just going to write about all my favorite video games here, but maybe
-ill throw in some other stuff about things that are happening in my life. don't keep your fingers crossed for that.</div><br> '''
+The Misc page is home to anything that doesn't fit on any of the other pages. Reallistically I am probably just going to write about video games here. </div><br> '''
 	body = body + templ.readContent(mcont,request.path) + "</html>"
 	return body
 # ap route for all the games under misc in route ? hopefully anyway! 
 @ap.route('/misc/<path:router>')
 def misc_route(router):
-	#router = '/misc/' + router
-#	if getattr(mcont,str(router),"error") != "error":
-#		runme = getattr(mcont,str(router),"error")
-#		return templ.page(str(router),runme())
-#	else:
-#		return templ.page("error",templ.error())
 	return templ.generatePage(router,mcont)
 @ap.route('/blog')
 def blog():
@@ -78,6 +69,12 @@ def blog():
 @ap.route('/blog/<path:router>')
 def blog_route(router):
 	return templ.generatePage(router,bcont)
+@ap.route('/secret')
+def secret():
+	return '<html>' + stylesheet + header + '''<h1> Secret page</h1> <div class = "card">
+You found the secret page, good job! 
+
+Kind of anticlimactic to be honest</div></html>'''
 @ap.route('/about')
 def about():
 	return '<html>' + stylesheet + header + '''<h1> About Me</h1> <div class = "card">
