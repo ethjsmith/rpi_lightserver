@@ -4,3 +4,4 @@ projectenv
 *.pyc
 secret.py
 *.save
+uploads/*

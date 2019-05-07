@@ -1,5 +1,6 @@
 from flask import Flask,redirect,request
 from flask_basicauth import BasicAuth
+from werkzeug import secure_filename
 from resources import templates, miscContent, projectContent, blogContent
 import subprocess, config, os, requests, secret
 
@@ -82,6 +83,23 @@ My name is Ethan Smith, and I am a CSIS student at Southern Utah University.
 at SUU I am also the Vice President of the cyber defence (&competition ) club, and a
 student security analyst.<br> Contact me at `ethan@esmithy.net` </div>
 </html>'''
+
+# File sharing section 
+@ap.route('/files', methods = ['GET','POST'])
+def files():
+	if request.method == 'POST':
+		f=request.files['file']
+		f.save('./uploads/' + secure_filename(f.filename))
+	links = ""
+	uploadedfiles= os.listdir('uploads/')
+	for z in uploadedfiles:
+		links = links + "<a href = \"uploads/" + z + "\" >" + z + "</a><br>"
+	return '<html>' + stylesheet + header + '''<h1> File share </h1> <div class = "card">
+<form method = "POST" enctype = "multipart/form-data">
+         <input type = "file" name = "file" />
+         <input type = "submit" value = "upload file"/>
+</form></div><br><div class = "card">
+''' + links + '</div></html>'
 
 @ap.route('/control')
 @basic_auth.required
