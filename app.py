@@ -100,6 +100,14 @@ def files():
          <input type = "submit" value = "upload file"/>
 </form></div><br><div class = "card">
 ''' + links + '</div></html>'
+# delete a file in the list of file sharing section
+# if you want to add a button to do this, that's pretty easy, there's an example of it
+# in my test repo attached to the filesharing
+@ap.route('/files/d/<path:filename>')
+def deletefile(filename):
+	if os.path.exists('uploads/' + filename):
+		os.remove('uploads/' + filename)
+	return redirect('/files')
 
 @ap.route('/control')
 @basic_auth.required
