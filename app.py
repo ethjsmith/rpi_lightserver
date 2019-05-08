@@ -113,6 +113,24 @@ def deletefile(filename):
 @basic_auth.required
 def controller():
 	return ap.send_static_file('index.html')
+# outline of overhauled light controller
+@ap.route('/control/go')
+@basic_auth.required
+def doEverything():
+	z = request.args.get('arg')
+	if z is not None:
+		if z == "on":
+			print "on"
+		else if z == "off":
+			print "off"
+		else if z == "on1":
+			print "on-1"
+		else if z == "off1":
+			print "off-1"
+		else:
+			print "error?"
+			# do something
+	return 0
 
 @ap.route('/control/on')
 @basic_auth.required
