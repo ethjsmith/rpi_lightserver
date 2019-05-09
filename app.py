@@ -2,12 +2,12 @@ from flask import Flask,redirect,request
 from flask_basicauth import BasicAuth
 from werkzeug import secure_filename
 from resources import templates, miscContent, projectContent, blogContent
-import subprocess, config, os, requests, secret
+import subprocess, config, os, requests, secret,sys
 
 
 conf = config.config()
 conf[0] = '-g ' + conf[0]
-
+print (sys.version)
 folder = os.path.dirname(os.path.realpath(__file__))
 ap = Flask(__name__,static_url_path="",static_folder=folder)
 
@@ -24,11 +24,9 @@ creds = secret.creds()
 ap.config['BASIC_AUTH_USERNAME'] = creds[0]
 ap.config['BASIC_AUTH_PASSWORD'] = creds[1]
 
-# ap.config['BASIC_AUTH_FORCE'] = True
 # this is basically a way better version of a php template, throw this onto any funtion's return to make 
 # that page have a top nav bar... saves a lot of effort! 
 header = templ.header() 
-#stylesheet = """<link rel = "stylesheet" href = "style.css">"""
 stylesheet = templ.stylesheet()
 basic_auth = BasicAuth(ap)
 
@@ -94,12 +92,7 @@ def files():
 	uploadedfiles= os.listdir('uploads/')
 	for z in uploadedfiles:
 		links = links + "<a href = \"uploads/" + z + "\" >" + z + "</a><br>"
-	return '<html>' + stylesheet + header + '''<h1> File share </h1> <div class = "card">
-<form method = "POST" enctype = "multipart/form-data">
-         <input type = "file" name = "file" />
-         <input type = "submit" value = "upload file"/>
-</form></div><br><div class = "card">
-''' + links + '</div></html>'
+	return '<html>' + stylesheet + header + '<h1> File share </h1> <div class = \"card\"> <form method = \"POST\" enctype = \"multipart/form-data\"><input type = \"file\" name = \"file\" /><input type = \"submit\" value = \"upload file\"/></form></div><br><div class = \"card\">' + links + '</div></html>'
 # delete a file in the list of file sharing section
 # if you want to add a button to do this, that's pretty easy, there's an example of it
 # in my test repo attached to the filesharing
@@ -112,50 +105,25 @@ def deletefile(filename):
 @ap.route('/control')
 @basic_auth.required
 def controller():
-	return ap.send_static_file('index.html')
+#	return ap.send_static_file('index.html')
+	return '<html>' + stylesheet + header + """<div class = \"card\"><p style=\"font-size:90px\"><a href=\"/control/go?arg=on\">Light On</a><br><a href=\"/control/go?arg=off\">Light Off</a><br><a href=\"/control/go?arg=on1\">Fan On(This doesnt do anything)</a><br><a href=\"/control/go?arg=off1\">Fan Off( This ones doesn\'t either lol)</a><br></p></div></html>"""
 # outline of overhauled light controller
 @ap.route('/control/go')
 @basic_auth.required
 def doEverything():
-	z = request.args.get('arg')
-	if z is not None:
-		if z == "on":
-			print "on"
-		else if z == "off":
-			print "off"
-		else if z == "on1":
-			print "on-1"
-		else if z == "off1":
-			print "off-1"
+	if request.args.get('arg') != None:
+		if request.args.get('arg') == "on":
+			subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[1]])
+		elif request.args.get('arg') == "off":
+			subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[2]])
+		elif request.args.get('arg') == "on1":
+			subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[3]])
+		elif request.args.get('arg') == "off1":
+			subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[4]])
 		else:
-			print "error?"
-			# do something
-	return 0
-
-@ap.route('/control/on')
-@basic_auth.required
-def l_on():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[1]])
+			print ("error?")
 	return redirect('/control')
-
-@ap.route('/control/off')
-@basic_auth.required
-def l_off():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[2]])
-	return redirect('/control')
-
-@ap.route('/control/on1')
-@basic_auth.required
-def l_on1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[3]])
-	return redirect('/control')
-
-@ap.route('/control/off1')
-@basic_auth.required
-def l_off1():
-	subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[4]])
-	return redirect('/control')
-
+#Heat system is currently legacy, everything used to work like this with it's own target, but now it's a bit cleaner ( or smaller at least) 
 @ap.route('/control/heatoff')
 @basic_auth.required
 def h_off():
