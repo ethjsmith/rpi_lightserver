@@ -12,14 +12,15 @@ class Template:
 					content += str(self.generatePreview(call(),z,url)) + " "
 		return content
 	def generatePreview(self, content,name,url):
-		pre = '''<br><a class = "noa" href = "'''+url+"/"+ name + '''"> <div class = "preview"><img src = "/resources/''' + name + """.jpg"><h4> """ + name + "</h4>"
+		pre = '''<br><a class = "noa" href = "'''+url+"/"+ name + '''"> <div class = "preview"><img src = "/resources/images/''' + name + """.jpg"><h4> """ + name + "</h4>"
 		content = str(content.split("</p>")[0])
 		content = pre + content + """<br><br><h6> READ MORE </h6></div></a>"""
 		return content
 	def page (self,name,content):
-		return "<html><head>" + self.stylesheet() + "<title>" + name + "</title></head><body>" + self.header() + "<h1>" + name + "</h1>" + """ <div class = "card "> <img src="/resources/""" + name + """.jpg" class = "regimage">"""  + content + "</div></body></html>"
-	def header(self):
-		return """<div class = "topnav">
+		return "<html><head>" + self.stylesheet() + "<title>" + name + "</title></head><body>" + self.header(0) + "<h1>" + name + "</h1>" + """ <div class = "card "> <img src="/resources/images/""" + name + """.jpg" class = "regimage">"""  + content + "</div></body></html>"
+	# generates a dynamic header based on what page is called
+	def header(self,selected):
+		x = """<div class = "topnav">
 		<a href="/">Home</a>
 		<a href="/projects">Projects</a>
 		<a href="/misc">Misc</a>
@@ -28,6 +29,16 @@ class Template:
 		<a href="/control">Admin</a>
 		</div>
 		"""
+		if selected == 0:
+			return x
+		else :
+			x = x.split(selected + "\"",1)
+			x[0] = x[0] + selected + "\" class = \"current\" "
+			z = " "
+			for part in x:
+				z+= part
+			return z
+
 	def generatePage(self,router, content):
 		#this function generates pages based on custom routes (router), and the content from the (content) object
 		if getattr(content,str(router),"error") != "error":

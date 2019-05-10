@@ -1,22 +1,24 @@
 # rpi_lightserver
-the simple web server that runs on my raspberry pi, which controls my lights
-Now you can set it up yourself as well!, just follow the poorly written instructions below
+the simple web server that runs on my raspberry pi, which controls all of my homemade IOT devices, and also serves dynamic python-generated webpages... Don't tell me about best practice, I don't belive in it.
 
 
 
 # Update 
-These instructions are now mostly out of date. there is a WIP `quickstart.sh` script, which when finished
-will install everything needed, but for now it would be pretty hard to build this project without some prior knowledge
 
-basically this is just a flask webserver, with some built in GPIO support, meant to run on a raspberry pi 
+Almost all of the readme is now obsolete, as the scope of the project has changed pretty drastically
+there are still some partially working scripts in the "scripts" folder, if you are really trying to set this up yourself.
 
+TODO: redo todo
+TODO: rewrite this README from the ground up
+TODO: change how page content is imported
 
 # TODO : 
-add enviroment variables for username and password ( for sites basic auth ( for now those lines are just cut out of the program ) )
-clean up config file (config.py ) 
-improve the website section of the project ( make it a real site, not just 2 lines of placeholder text )
-add functionallity to the website ( like php for consistent topbars, and site navigation ) 
+~~~add enviroment variables for username and password ( for sites basic auth ( for now those lines are just cut out of the program ) )~~~
+~~~clean up config file (config.py ) ~~~
+~~~improve the website section of the project ( make it a real site, not just 2 lines of placeholder text )~~~
+~~~add functionallity to the website ( like php for consistent topbars, and site navigation ) ~~~
 clean up the readme beyond this point
+learn more about web standards, and how higher level parts of the project like nginx work
 
 # credentials :
 for this project you need a file called "secret.py" in the same directory as the app.py, where you save the credentials. 
@@ -96,16 +98,4 @@ sudo python app.py
 
 **startup**
 
-One final thing to try is setting the program to run whenever the RPI restarts, so that it is always running ( barring a crash or internet outage)
-you can do this by editing your /etc/rc.local file with this line
-```
- TODO add the line here
-```
-
-
-some additional stuff ( alot of this has to change soon )
-
-you can now install all dependancies with quickstart.sh
-
-now using wsgi instead of naked flask, you can start the server with 
-`./start.sh` and also add that script to startup for the file to start automatically :) 
+TODO
