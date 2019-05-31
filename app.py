@@ -24,9 +24,9 @@ creds = secret.creds()
 ap.config['BASIC_AUTH_USERNAME'] = creds[0]
 ap.config['BASIC_AUTH_PASSWORD'] = creds[1]
 
-# this is basically a way better version of a php template, throw this onto any funtion's return to make 
-# that page have a top nav bar... saves a lot of effort! 
-header = templ.header(0) 
+# this is basically a way better version of a php template, throw this onto any funtion's return to make
+# that page have a top nav bar... saves a lot of effort!
+header = templ.header(0)
 stylesheet = templ.stylesheet()
 basic_auth = BasicAuth(ap)
 
@@ -37,7 +37,7 @@ def homepage():
 <p> What do you even put on a homepage of a website that you built for fun?</p>
 <p> Either way, welcome to ejsmithy.xyz, the website I built from the ground up using Python(flask) to avoid learning php for headers...</p>
 <p> Check out the source code <a href = \"https://github.com/urd000med/rpi_lightserver\">Here </a> and see if you can find all the interesting secrets and unlisted pages...</p>
-<p> Don't try to hack the page</p></div>
+<p> Don't try to hack the site</p></div>
 </body>
 </html>"""
 
@@ -58,7 +58,7 @@ def misc():
 The Misc page is home to anything that doesn't fit on any of the other pages. Reallistically I am probably just going to write about video games here. </div><br> '''
 	body = body + templ.readContent(mcont,request.path) + "</html>"
 	return body
-# ap route for all the games under misc in route ? hopefully anyway! 
+# ap route for all the games under misc in route ? hopefully anyway!
 @ap.route('/misc/<path:router>')
 def misc_route(router):
 	return templ.generatePage(router,mcont)
@@ -73,7 +73,7 @@ def blog_route(router):
 @ap.route('/secret')
 def secret():
 	return '<html>' + stylesheet + templ.header(0) + '''<h1> Secret page</h1> <div class = "card">
-You found the secret page, good job! 
+You found the secret page, good job!
 
 Kind of anticlimactic to be honest</div></html>'''
 @ap.route('/about')
@@ -82,14 +82,14 @@ def about():
 <p>My name is Ethan Smith, and I am a CSIS student at Southern Utah University.
 at SUU I am also the Vice President of the cyber defence (&competition ) club, and a
 student security analyst. I love programming ( prefer Python and Java), Snowboarding during the winter, and playing lots of different video games. I also enjoy homemade IOT devices, and <br> Contact me at `ethan@esmithy.net` </p>
-<p> About the site: <br> This site was built as a project, just something that I like to play around with when I have some downtime between work and school. 
-I had the idea to make a website which instead of having static html files and PHP templates, would use python to generate all the pages by chaining together string variables containing bits of html, which all together would generate webpages. I've done a lot of things to try and make the site 
+<p> About the site: <br> This site was built as a project, just something that I like to play around with when I have some downtime between work and school.
+I had the idea to make a website which instead of having static html files and PHP templates, would use python to generate all the pages by chaining together string variables containing bits of html, which all together would generate webpages. I've done a lot of things to try and make the site
 scalable, instead of static, and I've really enjoyed putting it together, although writing html with python syntax hilighting can be a pain sometimes! </p>
 
 </div>
 </html>'''
 
-# File sharing section 
+# File sharing section
 @ap.route('/files', methods = ['GET','POST'])
 def files():
 	if request.method == 'POST':
@@ -130,7 +130,7 @@ def doEverything():
 		else:
 			print ("error?")
 	return redirect('/control')
-#Heat system is currently legacy, everything used to work like this with it's own target, but now it's a bit cleaner ( or smaller at least) 
+#Heat system is currently legacy, everything used to work like this with it's own target, but now it's a bit cleaner ( or smaller at least)
 @ap.route('/control/heatoff')
 @basic_auth.required
 def h_off():
@@ -157,4 +157,3 @@ def h_high():
 
 if __name__ == "__main__":
 	ap.run(debug=True, host='0.0.0.0')
-
