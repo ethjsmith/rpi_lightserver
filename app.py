@@ -59,7 +59,7 @@ def projects_route(router):
 @ap.route('/misc')
 def misc():
 	body =  '<html>' + stylesheet + templ.header('/misc') + '''<h1> Random Stuff </h1> <div class ="card">
-The Misc page is home to anything that doesn't fit on any of the other pages. Reallistically I am probably just going to write about video games here. </div><br> '''
+The Misc page is home to anything that doesn't fit on any of the other pages. Realistically I am probably just going to write about video games here. </div><br> '''
 	body = body + templ.readContent(mcont,request.path) + "</html>"
 	return body
 # ap route for all the games under misc in route ? hopefully anyway!
@@ -84,11 +84,11 @@ Kind of anticlimactic to be honest</div></html>'''
 def about():
 	return '<html>' + stylesheet + templ.header('/about') + '''<h1> About Me</h1> <div class = "card">
 <p>My name is Ethan Smith, and I am a CSIS student at Southern Utah University.
-at SUU I am also the Vice President of the cyber defence (&competition ) club, and a
+at SUU I am also the Vice President of the cyber defence (competition) club, and a
 student security analyst. I love programming ( prefer Python and Java), Snowboarding during the winter, and playing lots of different video games. I also enjoy homemade IOT devices, and <br> Contact me at `ethan@esmithy.net` </p>
 <p> About the site: <br> This site was built as a project, just something that I like to play around with when I have some downtime between work and school.
-I had the idea to make a website which instead of having static html files and PHP templates, would use python to generate all the pages by chaining together string variables containing bits of html, which all together would generate webpages. I've done a lot of things to try and make the site
-scalable, instead of static, and I've really enjoyed putting it together, although writing html with python syntax hilighting can be a pain sometimes! </p>
+I had the idea to make a website which instead of having static html files and PHP templates, would use python to generate all the pages by chaining together string variables containing bits of html, which altogether would generate web pages. I've done a lot of things to try and make the site
+scalable, instead of static, and I've really enjoyed putting it together, although writing html with python syntax highlighting can be a pain sometimes! </p>
 
 </div>
 </html>'''
