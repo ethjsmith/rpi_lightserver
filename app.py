@@ -31,7 +31,7 @@ stylesheet = templ.stylesheet()
 basic_auth = BasicAuth(ap)
 
 #calendar variables
-tasks = []
+tasks = ["clean room","Go to Store"]
 complete = []
 
 @ap.route('/')
@@ -118,9 +118,9 @@ def deletefile(filename):
 def todo():
 	z = ""
 	if request.method == 'POST':
-		removeus = request.get_data().replace("+"," ").split("&")
+		removeus = str(request.get_data()).replace("+"," ").split("&")
 		for remove in removeus:
-			r = remove.split("=")
+			r = remove[:-1].split("=")
 			if r[1] in tasks:
 				tasks.remove(r[1])
 				complete.append(r[1])
@@ -137,13 +137,15 @@ def todo():
 	<form action="/calendar" method="POST">""" + z + """<input type="submit" value="Submit">
 	</form><form action="/calendar/a" method="POST"><input type = "text" name="task"><input type="submit" value="Add item"></form>
 	</div></body></html>"""
+
 @ap.route('/calendar/a',methods=['GET','POST'])
 def todo_a():
 	if request.method == 'POST':
-		print request.get_data()
-		apendme = request.get_data().replace("+"," ").split("=")
-		tasks.append(apendme[1])
+		#print request.get_data()
+		apendme = str(request.get_data()).replace("+"," ").split("=")
+		tasks.append(apendme[1][:-1])
 	return redirect("/calendar")
+
 @ap.route('/control')
 @basic_auth.required
 def controller():
