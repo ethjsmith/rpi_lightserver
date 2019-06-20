@@ -30,9 +30,6 @@ header = templ.header(0)
 stylesheet = templ.stylesheet()
 basic_auth = BasicAuth(ap)
 
-#calendar variables
-tasks = ["clean room","Go to Store"]
-complete = []
 
 @ap.route('/')
 def homepage():
@@ -113,38 +110,6 @@ def deletefile(filename):
 	if os.path.exists('uploads/' + filename):
 		os.remove('uploads/' + filename)
 	return redirect('/files')
-
-@ap.route('/calendar',methods=['GET','POST'])
-def todo():
-	z = ""
-	if request.method == 'POST':
-		removeus = str(request.get_data()).replace("+"," ").split("&")
-		for remove in removeus:
-			r = remove[:-1].split("=")
-			if r[1] in tasks:
-				tasks.remove(r[1])
-				complete.append(r[1])
-				while len(complete) > 5:
-					del complete[0]
-		#print(removeus)
-	for task in complete:
-		z = z + "<div style='text-decoration:line-through;'>" + task + "</div><br>"
-	for task in tasks:
-		z = z + "<input type='checkbox' name='Task' value='"+ task +"'>"+ task +"<br>"
-	#print(tasks)
-	#print(complete)
-	return "<html>" + stylesheet + templ.header(0) + """<h3> TODO </h3> <div class = "card">
-	<form action="/calendar" method="POST">""" + z + """<input type="submit" value="Submit">
-	</form><form action="/calendar/a" method="POST"><input type = "text" name="task"><input type="submit" value="Add item"></form>
-	</div></body></html>"""
-
-@ap.route('/calendar/a',methods=['GET','POST'])
-def todo_a():
-	if request.method == 'POST':
-		#print request.get_data()
-		apendme = str(request.get_data()).replace("+"," ").split("=")
-		tasks.append(apendme[1][:-1])
-	return redirect("/calendar")
 
 @ap.route('/control')
 @basic_auth.required
