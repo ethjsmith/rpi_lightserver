@@ -1,5 +1,6 @@
 import subprocess, config, os, requests, secret, sys, flask_login, hashlib
-from flask import Flask,redirect,request, render_template, url_for, flash
+from importlib import import_module
+from flask import Flask,redirect,request, render_template, url_for, flash, Response
 from flask_basicauth import BasicAuth
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user, UserMixin, AnonymousUserMixin, confirm_login, fresh_login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -8,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from resources import templates, miscContent, projectContent, blogContent
 
+Camera = import_module('camera_pi').Camera
 
 conf = config.config()
 conf[0] = '-g ' + conf[0]
@@ -33,7 +35,12 @@ ap.config['BASIC_AUTH_PASSWORD'] = creds[1]
 header = templ.header(0)
 stylesheet = templ.stylesheet()
 basic_auth = BasicAuth(ap)
-
+def gen(camera):
+# generates video stream
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @ap.route('/')
 def homepage():
@@ -115,6 +122,19 @@ def deletefile(filename):
     if os.path.exists('uploads/' + filename):
         os.remove('uploads/' + filename)
     return redirect('/files')
+
+# function for the route that serves the video :^)
+@ap.route('/video')
+@basic_auth.required
+def video():
+    return Response(gen(Camera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@ap.route('/vid')
+@basic_auth.required
+# displays the video with other website contents 
+def vid():
+    return render_template('stream.html')
 
 @ap.route('/control')
 @basic_auth.required
