@@ -14,14 +14,13 @@ this will allow pages with basicauth to have credentials that aren't shared in t
 
 # Hardware Requirements
 
-..* [A raspberry pi](https://www.raspberrypi.org/) is required for all of the features in the control and video sections to work, I would suggest a PI4, as it is the newest, and most powerful, but hypothetically any device would work.(certainly pi3 does)
++ [A raspberry pi](https://www.raspberrypi.org/) is required for all of the features in the control and video sections to work, I would suggest a PI4, as it is the newest, and most powerful, but hypothetically any device would work.(certainly pi3 does)
 
-..* [GPIO Transmitters and receivers](https://www.amazon.com/gp/product/B017AYH5G0/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1) are the transmitters that I am using in this project. you do need the receiver in order to find your outlet's frequency, unless it is included in the documentation for your outlet
++ [GPIO Transmitters and receivers](https://www.amazon.com/gp/product/B017AYH5G0/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1) are the transmitters that I am using in this project. you do need the receiver in order to find your outlet's frequency, unless it is included in the documentation for your outlet
 
++ [433mhz Wireless outlets to recive radio signals](https://www.amazon.com/gp/product/B01FHIG5GW/ref=oh_aui_detailpage_o01_s00?ie=UTF8&psc=1) are the outlets I am using, although this project should work for any 433mhz compatible outlet
 
-..* [433mhz Wireless outlets to recive radio signals](https://www.amazon.com/gp/product/B01FHIG5GW/ref=oh_aui_detailpage_o01_s00?ie=UTF8&psc=1) are the outlets I am using, although this project should work for any 433mhz compatible outlet
-
-..* [a raspberry pi camera ](https://www.raspberrypi.org/products/camera-module-v2/) for a view-able live stream
++ [a raspberry pi camera ](https://www.raspberrypi.org/products/camera-module-v2/) for a view-able live stream
 
 you will need to find the RF frequency of your outlets. to do this, I used an
 RF_sniffer program, and the remote that came with my outlet. this program is
@@ -85,4 +84,4 @@ sudo systemctl enable app
 ```
 **nginx and more **
 
-if you want the site to be accessible from outside, a good web request server like nginx would be a good addition. While not 100% required, it can be very helpful. 
+if you want the site to be accessible from outside, a good web request server like nginx would be a good addition. While not 100% required, it can be very helpful.
