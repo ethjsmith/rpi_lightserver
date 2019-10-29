@@ -1,0 +1,16 @@
+<br>
+<h3> Comments </h3>
+{% for c in comments%}
+    <div class = "card">
+        <h4> {{c.title}} </h4><br>
+        {{c.message}}<br>
+        <b>{{c.poster}}</b> Posted this on : <b>{{c.date}}</b>
+        {% if current_user.name == 'ethan' or current_user.name == c.poster%}
+            <a href='/admin/comment/{{c.id}}'>Delete</a>
+        {% endif %}
+    </div><br>
+{% endfor %}
+<br>
+{% if current_user.name != "Not Logged in"%}
+    {% include 'addcomment.html' %}
+{% endif %}

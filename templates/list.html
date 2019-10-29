@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- <div class = 'card'> -->
+        <h1>{{title}}</h1>
+        <!-- {{body|safe}}
+    </div> -->
+    {% for article in articles %}
+        <br><a class = "noa" href = "/{{article.topic}}/{{article.id}}">
+        <div class = "preview"> <img src = {{article.picture}}>
+        <h4>{{article.title}}</h4>
+        {{article.para|safe}}
+        <br><br><h6> READ MORE </h6> </div></a>
+    {% endfor %}
+{% endblock %}

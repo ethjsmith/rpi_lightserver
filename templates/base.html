@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <title> {{title}} </title>
+        <link rel="stylesheet" href ="{{ url_for('static', filename='style.css')}}">
+        <link rel="shortcut icon" type="image/png" href = "/static/favicon.png"/>
+    </head>
+    <body>
+        <header>
+            {% include 'nav.html' %}
+        </header>
+        <br>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class = "alert">
+                    {% for message in messages %}
+                        {{message}}<br>
+                    {% endfor %}
+                </div><br>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

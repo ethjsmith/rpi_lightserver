@@ -1,0 +1,16 @@
+<div class = "topnav">
+    <a href="/"{% if request.path == '/'%} class = 'current'{% endif %}>Home</a>
+    {% for topic in topics %}
+    <a href = "/{{topic.topic}}"{% if request.path == "/" + topic.topic %} class = 'current' {% endif %}> {{topic.topic}}</a>
+
+    {% endfor %}
+    <a href = "/About"{% if request.path == '/About'%} class = 'current'{% endif %}>About Me</a>
+    {% if current_user.name == "Not Logged in"%}
+        <a href="/mypage"{% if request.path == '/mypage'%} class = 'current'{% endif %}  style="float:right;">{{current_user.name}} ⚙ </a>
+        <a href="/register"{% if request.path == '/register'%} class = 'current'{% endif %} style="float:right;">register</a>
+    {% else %}
+        <a href="/logout"{% if request.path == '/logout'%} class = 'current'{% endif %} style="float:right;">logout</a>
+        <a href="/admin"{% if request.path == '/admin'%} class = 'current'{% endif %} style="float:right;">admin</a>
+        <a href="/mypage"{% if request.path == '/mypage'%} class = 'current'{% endif %} style="float:right;">{{current_user.name}} ⚙ </a>
+    {% endif %}
+</div>

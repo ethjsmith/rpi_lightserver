@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{art.title}}</h1><br>
+<img src = '{{art.picture}}' class = 'regimage'>
+<div class="card">
+    {{art.body|safe}}
+</div>
+{{body}}
+</div>
+{% include 'comments.html' %}
+{% endblock %}

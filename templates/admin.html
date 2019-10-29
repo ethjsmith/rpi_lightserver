@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+        ---------------Accounts :---------------<br>
+        {% for user in users %}
+            Name:{{user.name}} Email: {{user.email}}
+            <a href = "/admin/user/{{user.email}}"> Delete user </a><br>
+        {% endfor %}
+        <br>
+        ---------------Pages: ---------------<br>
+            {% for page in pages%}
+                {{page.title}}
+                <a href = "/admin/post/{{page.title}}"> Delete page </a><br>
+            {% endfor %}
+
+{% endblock %}

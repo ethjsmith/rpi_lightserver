@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <form method = "POST" enctype = "multipart/form-data">
+            <input type = "text" name = "email" /> Email<br>
+            <input type = "password" name = "password"/>Password <br>
+            <input type = "password" name = "password2"/> confirm password <br>
+            <input type = "text" name = 'name' /> Name <br>
+            <input type = "submit" value = "register"/>
+        </form>
+{% endblock %}
