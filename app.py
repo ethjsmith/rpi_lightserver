@@ -2,7 +2,7 @@ import subprocess, config, os, requests, secret, sys, flask_login, hashlib
 from flask import Flask,redirect,request, render_template, url_for, flash
 from flask_basicauth import BasicAuth
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user, UserMixin, AnonymousUserMixin, confirm_login, fresh_login_required
-from flask_sqlachemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 

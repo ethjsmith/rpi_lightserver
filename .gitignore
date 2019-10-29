@@ -5,3 +5,4 @@ projectenv
 secret.py
 *.save
 uploads/*
+webenv
