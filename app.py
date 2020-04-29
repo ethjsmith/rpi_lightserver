@@ -1,5 +1,5 @@
 
-import flask_login, hashlib, datetime, subprocess, os
+import flask_login, hashlib, datetime, subprocess, os, secret
 from importlib import import_module
 from flask import Flask, request, render_template, redirect, url_for, flash, Response, g, session
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user, UserMixin, AnonymousUserMixin, confirm_login, fresh_login_required
@@ -11,7 +11,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 ap = Flask(__name__)
 ap.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///db.sqlite'
 ap.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-ap.secret_key = "x9fLx81af*x90xbfx03xfaBxfcxc9r)x84x8bxd1xcafxe92x08x99x1exee8x05nt"
+
+ap.secret_key = secret.system()
 
 
 db = SQLAlchemy(ap)
