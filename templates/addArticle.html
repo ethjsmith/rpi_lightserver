@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> Create a new article </h1>
+<div class = 'card'>
+<form method = "POST" enctype = "multipart/form-data">
+    <input type = "text" name = "title" placeholder = 'article title'/><br>
+    <textarea name = "body" rows='40' cols = '30' placeholder = 'body of article' ></textarea><br>
+    <select name = 'picture'>
+        {% for pic in getFiles() %}
+        <option value ="{{pic}}">{{pic}}</option>
+        {% endfor %}
+    </select>Picture to use<br>
+    <select name = 'topic'>
+        <option value = '_newTopic'>New Topic</option>
+        {% for topic in getTopics() %}
+        <option value ="{{topic.topic}}">{{topic.topic}}</option>
+        {% endfor %}
+    </select>Topic to list under<br>
+    <input type = "text" name = "newTopic" placeholder = 'or enter a new topic :( '/><br>
+    <input type = "submit" value = "Create!"/>
+</form>
+</div><br>
+{% endblock %}

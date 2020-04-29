@@ -5,7 +5,7 @@
         <h1>{{title}}</h1>
         <!-- {{body|safe}}
     </div> -->
-    {% for article in articles %}
+    {% for article in getPosts(title) %}
         <br><a class = "noa" href = "/{{article.topic}}/{{article.id}}">
         <div class = "preview"> <img src = {{article.picture}}>
         <h4>{{article.title}}</h4>

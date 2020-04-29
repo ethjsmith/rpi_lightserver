@@ -1,11 +1,11 @@
 <br>
 <h3> Comments </h3>
-{% for c in comments%}
+{% for c in getComments(pidd) %}
     <div class = "card">
         <h4> {{c.title}} </h4><br>
         {{c.message}}<br>
-        <b>{{c.poster}}</b> Posted this on : <b>{{c.date}}</b>
-        {% if current_user.name == 'ethan' or current_user.name == c.poster%}
+        <b>{{c.postername}}</b> Posted this on : <b>{{c.date}}</b>
+        {% if current_user.permission > 9 or current_user.id == c.poster%}
             <a href='/admin/comment/{{c.id}}'>Delete</a>
         {% endif %}
     </div><br>
