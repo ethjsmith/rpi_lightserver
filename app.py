@@ -89,7 +89,16 @@ class Post(db.Model):
 
     def getFirstParagraph(self):
         self.para = str(self.body.split("</p>")[0])
-
+class Target(db.Model):
+    __tablename__ = "Target"
+    id= db.Column(db.Integer, primary_key= True)
+    data = db.Column(db.String())
+    date = db.Column(db.String())
+    time = db.Column(db.String())
+    def __init__(self,data):
+        self.data = data
+        self.date = datetime.date.today().strftime('%b %d, %Y')
+        self.time = datetime.datetime.now().strftime('%H:%M')
 class Anon(AnonymousUserMixin):
     name = u"Not Logged in"
 login_manager = LoginManager()
@@ -413,9 +422,19 @@ def topic(url):
     posts = Post.query.filter_by(topic=url).all()
     if posts:
         return render_template("list.html",title = url, articles = posts)
+    errorpost = Target(request.url)
+    db.session.add(errorpost)
+    db.session.commit()
     return render_template("genericpage.html",body="Topic not found!",title="Error")
 
-
+@ap.route('/attacks')
+@login_required
+def attacks():
+    returns = Target.query.filter_by(date=str(datetime.date.today().strftime('%b %d, %Y')))
+    retme = ""
+    for x in returns:
+    	retme += 'at '+ x.time + "::" + x.data + "<br>"
+    return render_template("genericpage.html",body=retme,title='Recent attacks!')
 # This section is the driver for all generic article pages
 @ap.route("/<path:url>/<path:url2>",methods=["GET","POST"])
 def artcle(url,url2):
