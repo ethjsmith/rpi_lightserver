@@ -3,6 +3,7 @@ projectenv
 *.swp
 *.pyc
 secret.py
+db.sqlite
 *.save
 uploads/*
 webenv
