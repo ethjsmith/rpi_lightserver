@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <form method = "POST" enctype = "multipart/form-data">
+            <select id='date'>
+                {% for x in options %}
+                <option value = x>x</option>
+                {% endfor %}
+            </select>
+            <input type = "submit" value = "login"/>
+        </form>
+        <div class = 'card'>
+            {{body|safe}}
+        </div>
+{% endblock %}

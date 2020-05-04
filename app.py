@@ -427,14 +427,17 @@ def topic(url):
     db.session.commit()
     return render_template("genericpage.html",body="Topic not found!",title="Error")
 
-@ap.route('/attacks')
+@ap.route('/attacks', methods=["GET","POST"])
 @login_required
 def attacks():
-    returns = Target.query.filter_by(date=str(datetime.date.today().strftime('%b %d, %Y')))
+    if request.method == "POST":
+        returns = Target.query.filter_by(date=request.form['date'])
+    else:
+        returns = Target.query.filter_by(date=str(datetime.date.today().strftime('%b %d, %Y')))
     retme = ""
     for x in returns:
     	retme += 'at '+ x.time + "::" + x.data + "<br>"
-    return render_template("genericpage.html",body=retme,title='Recent attacks!')
+    return render_template("attacks.html",body=retme,title='Recent attacks!',options=Target.query[:10])
 # This section is the driver for all generic article pages
 @ap.route("/<path:url>/<path:url2>",methods=["GET","POST"])
 def artcle(url,url2):
@@ -446,6 +449,9 @@ def artcle(url,url2):
     post = Post.query.filter_by(topic=url,id=url2).first()
     if post:
         return render_template("article.html",art = post,title=post.title,pidd=post.id)
+    errorpost = Target(request.url)
+    db.session.add(errorpost)
+    db.session.commit()
     return render_template("genericpage.html",body="Article not found!",title="Error")
 
 
