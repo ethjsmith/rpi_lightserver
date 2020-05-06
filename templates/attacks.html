@@ -2,13 +2,16 @@
 
 {% block content %}
         <form method = "POST" enctype = "multipart/form-data">
-            <select id='date'>
+            <select name ='date'>
+                <option label=" "> </option>
                 {% for x in options %}
-                <option value = x>x</option>
+                <option value = "{{x[0]}}">{{x[0]}}</option>
                 {% endfor %}
             </select>
-            <input type = "submit" value = "login"/>
-        </form>
+            <input type = "submit" value = "Search"/>
+        </form> <br>
+        {{current}}
+        <br>
         <div class = 'card'>
             {{body|safe}}
         </div>

@@ -99,6 +99,8 @@ class Target(db.Model):
         self.data = data
         self.date = datetime.date.today().strftime('%b %d, %Y')
         self.time = datetime.datetime.now().strftime('%H:%M')
+    def __str__(self):
+        return self.date
 class Anon(AnonymousUserMixin):
     name = u"Not Logged in"
 login_manager = LoginManager()
@@ -431,13 +433,15 @@ def topic(url):
 @login_required
 def attacks():
     if request.method == "POST":
+        y =request.form['date']
         returns = Target.query.filter_by(date=request.form['date'])
     else:
-        returns = Target.query.filter_by(date=str(datetime.date.today().strftime('%b %d, %Y')))
+        y=str(datetime.date.today().strftime('%b %d, %Y'))
+        returns = Target.query.filter_by(date=y)
     retme = ""
     for x in returns:
     	retme += 'at '+ x.time + "::" + x.data + "<br>"
-    return render_template("attacks.html",body=retme,title='Recent attacks!',options=Target.query[:10])
+    return render_template("attacks.html",body=retme,title='Recent attacks!',current=y,options=db.session.query(Target.date).distinct())
 # This section is the driver for all generic article pages
 @ap.route("/<path:url>/<path:url2>",methods=["GET","POST"])
 def artcle(url,url2):
