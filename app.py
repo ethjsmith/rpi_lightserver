@@ -141,6 +141,38 @@ def admin_required(f):
     wrap.__name__=f.__name__
     return wrap
 
+def login_required_v2(f):
+    def wrap(*args, **kwargs):
+        if 'user' in request.args and 'password' in request.args:
+            if api_login(request.args['user'],request.args['password']):
+                return f(*args, **kwargs)
+            else:
+                return login_manager.unauthorized()
+        elif not current_user.is_authenticated:
+            return login_manager.unauthorized()
+        return f(*args, **kwargs)
+    wrap.__name__=f.__name__
+    return wrap
+
+def api_login(username, password):
+    user = User.query.filter_by(email=username).first()
+    if user != None:
+        if username == user.email:
+            if user.check_password(password):
+                if login_user(user,remember=True):
+                    flash("successful login for " + user.name,category='info')
+                    return True
+    return False
+    #     if request.method in EXEMPT_METHODS:
+    #         return f(*args, **kwargs)
+    #     elif current_app.config.get('LOGIN_DISABLED'):
+    #         return f(*args, **kwargs)
+    #     elif not current_user.is_authenticated:
+    #         return current_app.login_manager.unauthorized()
+    #     return f(*args, **kwargs)
+    # return decorated_view
+
+
 #Context processor makes functions and variable available to the app ( most importantly for my usage, the templates)
 @ap.context_processor
 def giveFunctions():
@@ -174,6 +206,7 @@ def home():
 
 # About route, this is a legacy page, which doesn't scale like the other pages :(
 @ap.route('/About')
+@login_required_v2
 def about_page():
     k = "<h1>About Me</h1><br><p>My name is Ethan Smith, and I am a CSIS student at Southern Utah University. at SUU I am also the Vice President of the cyber defence (competition) club, and a student security analyst. I love programming ( prefer Python and Java), Snowboarding during the winter, and playing lots of different video games. I also enjoy homemade IOT devices, and <br> Contact me at `ethan@esmithy.net` </p> <p> About the site: <br> This site was built as a project, just something that I like to play around with when I have some downtime between work and school. I had the idea to make a website which instead of having static html files and PHP templates, would use python to generate all the pages by chaining together string variables containing bits of html, which altogether would generate web pages. I've done a lot of things to try and make the site scalable, instead of static, and I've really enjoyed putting it together, although writing html with python syntax highlighting can be a pain sometimes! </p>"
     return render_template('genericpage.html',title="About",body=k)
@@ -207,7 +240,7 @@ def login():
         if user != None:
             username = request.form["username"]
             pas = request.form["password"]
-            if username  == user.email:
+            if username == user.email:
                 if user.check_password(pas):
                     if login_user(user,remember=True):
                         flash("successful login for " + user.name,category='info')
