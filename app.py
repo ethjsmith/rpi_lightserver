@@ -239,16 +239,16 @@ def doEverything():
     if request.args.get('arg') != None:
         if request.args.get('arg') == "on":
             print("do thing 1")
-            #subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[1]])
+            subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[1]])
         elif request.args.get('arg') == "off":
             print("do thing 2")
-            #subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[2]])
+            subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[2]])
         elif request.args.get('arg') == "on1":
             print("do thing 3")
-            #subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[3]])
+            subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[3]])
         elif request.args.get('arg') == "off1":
             print("do thing 4")
-            #subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[4]])
+            subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[4]])
         else:
             print ("error?")
     return redirect('/control')
