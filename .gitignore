@@ -3,6 +3,7 @@ projectenv
 *.swp
 *.pyc
 secret.py
+picamera.py
 db.sqlite
 *.save
 uploads/*
