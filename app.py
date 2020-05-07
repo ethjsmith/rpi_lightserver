@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
-#Camera = import_module('camera_pi').Camera
+Camera = import_module('camera_pi').Camera
 ap = Flask(__name__)
 ap.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///db.sqlite'
 ap.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
