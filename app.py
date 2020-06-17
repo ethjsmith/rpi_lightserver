@@ -13,6 +13,8 @@ ap.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///db.sqlite'
 ap.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 ap.secret_key = secret.system()
+conf = secret.config()
+conf[0] = '-g ' + conf[0]
 
 
 db = SQLAlchemy(ap)
