@@ -268,7 +268,8 @@ def control():
 
 # Protected NONPAGE route redirects control's output methods, running the actual scripts, and then redirecting back to the control page
 @ap.route('/control/go')
-@login_required
+@login_required_v2
+#@login_required
 @admin_required
 def doEverything():
     if request.args.get('arg') != None:
