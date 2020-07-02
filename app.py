@@ -468,6 +468,7 @@ def topic(url):
 @ap.route('/attacks', methods=["GET","POST"])
 @login_required
 def attacks():
+
     if request.method == "POST":
         y =request.form['date']
         returns = Target.query.filter_by(date=request.form['date'])
