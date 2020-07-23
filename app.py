@@ -4,7 +4,7 @@ from importlib import import_module
 from flask import Flask, request, render_template, redirect, url_for, flash, Response, g, session
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user, UserMixin, AnonymousUserMixin, confirm_login, fresh_login_required
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
 Camera = import_module('camera_pi').Camera
@@ -88,15 +88,17 @@ class Post(db.Model):
         self.picture = picture
         self.body = body
         self.getFirstParagraph()
-
+        self.date = datetime.date.today().strftime('%b %d, %Y')
     def getFirstParagraph(self):
         self.para = str(self.body.split("</p>")[0])
+# This is the database entry for the data stored in the "attacks " page
 class Target(db.Model):
     __tablename__ = "Target"
     id= db.Column(db.Integer, primary_key= True)
     data = db.Column(db.String())
     date = db.Column(db.String())
     time = db.Column(db.String())
+    tstamp = db.Column(db.DateTime, default = datetime.datetime.utcnow)
     def __init__(self,data):
         self.data = data
         self.date = datetime.date.today().strftime('%b %d, %Y')
@@ -460,9 +462,7 @@ def topic(url):
     posts = Post.query.filter_by(topic=url).all()
     if posts:
         return render_template("list.html",title = url, articles = posts)
-    errorpost = Target(request.url)
-    db.session.add(errorpost)
-    db.session.commit()
+    addAttack(request.url)
     return render_template("genericpage.html",body="Topic not found!",title="Error")
 
 @ap.route('/attacks', methods=["GET","POST"])
@@ -480,6 +480,17 @@ def attacks():
     	retme += 'at '+ x.time + "::" + x.data + "<br>"
     return render_template("attacks.html",body=retme,title='Recent attacks!',current=y,options=db.session.query(Target.date).distinct())
 # This section is the driver for all generic article pages
+@ap.route("/attacks/purge")
+@login_required
+def attack2():
+
+    now = str(datetime.date.today().strftime('%Y'))
+    #Target.query.filter_by(date[:4] == now).delete()
+    x = Target.query.filter_by(date[:4] == now)
+    for xx in x:
+        print(xx)
+    return redirect("/attacks")
+
 @ap.route("/<path:url>/<path:url2>",methods=["GET","POST"])
 def artcle(url,url2):
     if request.method == "POST":
@@ -490,12 +501,17 @@ def artcle(url,url2):
     post = Post.query.filter_by(topic=url,id=url2).first()
     if post:
         return render_template("article.html",art = post,title=post.title,pidd=post.id)
-    errorpost = Target(request.url)
-    db.session.add(errorpost)
-    db.session.commit()
+    addAttack(request.url)
     return render_template("genericpage.html",body="Article not found!",title="Error")
 
-
+def addAttack(url):
+    n = Target(url)
+    db.session.add(n)
+    count = Target.query.count()
+    if count > 500:
+        first = Target.query.order_by(Target.tstamp.asc()).first()
+        db.session.delete(first)
+    db.session.commit()
 
 # actually runs the program
 if (__name__ == "__main__"):

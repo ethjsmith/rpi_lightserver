@@ -27,7 +27,7 @@ improve ability to add paragraphs to articles ?
 
 currently you can create and load the database like this :
 ```python
-from app import User,Post,Comment,Anon
+from app import User,Post,Comment,Anon,Target
 from app import db
 
 db.create_all()
