@@ -9,6 +9,7 @@
         <br><a class = "noa" href = "/{{article.topic}}/{{article.id}}">
         <div class = "preview"> <img src = {{article.picture}}>
         <h4>{{article.title}}</h4>
+        Posted:{{article.tstamp.month}}/{{article.tstamp.day}}/{{article.tstamp.year}}<br>
         {{article.para|safe}}
         <br><br><h6> READ MORE </h6> </div></a>
     {% endfor %}

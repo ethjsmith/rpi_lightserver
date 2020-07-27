@@ -6,6 +6,7 @@ from flask_login import LoginManager, current_user, login_required, login_user, 
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate
 
 Camera = import_module('camera_pi').Camera
 ap = Flask(__name__)
@@ -18,7 +19,9 @@ conf[0] = '-g ' + conf[0]
 
 
 db = SQLAlchemy(ap)
+
 db.create_all()
+migrate = Migrate(ap,db)
 class User(UserMixin, db.Model):
     '''User database model, created by new user (name,password,email)'''
     __tablename__ = "User"
@@ -64,6 +67,7 @@ class Comment(db.Model):
     postername = db.Column(db.String())
     date = db.Column(db.String())
     article = db.Column(db.Integer)
+    tstamp = db.Column(db.DateTime, default = datetime.datetime.utcnow)
     def __init__(self,title,message,poster,postername,article):
         self.title = title
         self.message = message
@@ -82,6 +86,7 @@ class Post(db.Model):
     body = db.Column(db.String())
     para = db.Column(db.String())
     date = db.Column(db.String())
+    tstamp = db.Column(db.DateTime, default = datetime.datetime.utcnow)
     def __init__(self,topic,title,picture,body):
         self.topic = topic
         self.title = title
@@ -137,7 +142,7 @@ def is_admin():
     return True
 def admin_required(f):
     def wrap(*args, **kwargs):
-        if current_user.email == 'ethan@esmithy.net':
+        if current_user.email == 'a':
             return f(*args, **kwargs)
         else:
             print("user not authorized for this page ")
@@ -182,7 +187,7 @@ def api_login(username, password):
 def giveFunctions():
     def getPosts(url=None):
         if url is not None:
-            posts = Post.query.filter_by(topic=url).all()
+            posts = Post.query.filter_by(topic=url).order_by(Post.tstamp.desc()).all()
         else:
             posts = Post.query.all()
         return posts
@@ -190,7 +195,7 @@ def giveFunctions():
         topics = Post.query.with_entities(Post.topic).distinct()
         return topics
     def getComments(z):
-        comments = Comment.query.filter_by(article=z)
+        comments = Comment.query.filter_by(article=z).order_by(Comment.tstamp.desc())
         return comments
     def getFiles():
         x=[]
@@ -461,6 +466,8 @@ def userpage():
 def topic(url):
     posts = Post.query.filter_by(topic=url).all()
     if posts:
+        for p in posts:
+            print(p.tstamp)
         return render_template("list.html",title = url, articles = posts)
     addAttack(request.url)
     return render_template("genericpage.html",body="Topic not found!",title="Error")
