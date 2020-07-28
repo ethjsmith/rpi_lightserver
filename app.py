@@ -143,7 +143,7 @@ def is_admin():
     return True
 def admin_required(f):
     def wrap(*args, **kwargs):
-        if current_user.email == 'ethan@esmithy.net':
+        if current_user.email == secret.admin():
             return f(*args, **kwargs)
         else:
             print("user not authorized for this page ")
