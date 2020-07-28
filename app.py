@@ -4,6 +4,7 @@ from importlib import import_module
 from flask import Flask, request, render_template, redirect, url_for, flash, Response, g, session
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user, UserMixin, AnonymousUserMixin, confirm_login, fresh_login_required
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import extract
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
@@ -142,7 +143,7 @@ def is_admin():
     return True
 def admin_required(f):
     def wrap(*args, **kwargs):
-        if current_user.email == 'a':
+        if current_user.email == 'ethan@esmithy.net':
             return f(*args, **kwargs)
         else:
             print("user not authorized for this page ")
@@ -476,28 +477,28 @@ def topic(url):
 @login_required
 def attacks():
 
-    if request.method == "POST":
-        y =request.form['date']
-        returns = Target.query.filter_by(date=request.form['date'])
+    if request.method == "POST" and request.form["date"] != "":
+        d = request.form['date'].split(",")
+        prev = datetime.datetime(int(d[2]),int(d[0]),int(d[1]))
+        next = prev + datetime.timedelta(days = 1)
+        returns = Target.query.filter(Target.tstamp >= prev).filter(Target.tstamp <= next)
     else:
-        y=str(datetime.date.today().strftime('%b %d, %Y'))
-        returns = Target.query.filter_by(date=y)
+        y=datetime.date.today() - datetime.timedelta(days  = 1)
+        returns = Target.query.filter(Target.tstamp >= y)
     retme = ""
     for x in returns:
     	retme += 'at '+ x.time + "::" + x.data + "<br>"
-    return render_template("attacks.html",body=retme,title='Recent attacks!',current=y,options=db.session.query(Target.date).distinct())
-# This section is the driver for all generic article pages
+    return render_template("attacks.html",body=retme,title='Recent attacks!',current=y,options=db.session.query(extract("month",Target.tstamp), extract("day",Target.tstamp), extract("year",Target.tstamp)).distinct())
+
 @ap.route("/attacks/purge")
 @login_required
 def attack2():
-
-    now = str(datetime.date.today().strftime('%Y'))
-    #Target.query.filter_by(date[:4] == now).delete()
-    x = Target.query.filter_by(date[:4] == now)
-    for xx in x:
-        print(xx)
+    # removes all data older than 60 days
+    n = datetime.datetime.today() - datetime.timedelta(days = 60)
+    tgts = Target.query.filter(Target.tstamp < n).delete()
+    db.session.commit()
     return redirect("/attacks")
-
+# This section is the driver for all generic article pages
 @ap.route("/<path:url>/<path:url2>",methods=["GET","POST"])
 def artcle(url,url2):
     if request.method == "POST":
@@ -514,10 +515,6 @@ def artcle(url,url2):
 def addAttack(url):
     n = Target(url)
     db.session.add(n)
-    count = Target.query.count()
-    if count > 500:
-        first = Target.query.order_by(Target.tstamp.asc()).first()
-        db.session.delete(first)
     db.session.commit()
 
 # actually runs the program
