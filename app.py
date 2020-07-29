@@ -143,7 +143,7 @@ def is_admin():
     return True
 def admin_required(f):
     def wrap(*args, **kwargs):
-        if current_user.email == secret.admin():
+        if current_user.email == 'ethan@esmithy.net':
             return f(*args, **kwargs)
         else:
             print("user not authorized for this page ")
@@ -479,9 +479,9 @@ def attacks():
 
     if request.method == "POST" and request.form["date"] != "":
         d = request.form['date'].split(",")
-        prev = datetime.datetime(int(d[2]),int(d[0]),int(d[1]))
-        next = prev + datetime.timedelta(days = 1)
-        returns = Target.query.filter(Target.tstamp >= prev).filter(Target.tstamp <= next)
+        y = datetime.datetime(int(d[2]),int(d[0]),int(d[1]))
+        next = y + datetime.timedelta(days = 1)
+        returns = Target.query.filter(Target.tstamp >= y).filter(Target.tstamp <= next)
     else:
         y=datetime.date.today() - datetime.timedelta(days  = 1)
         returns = Target.query.filter(Target.tstamp >= y)
