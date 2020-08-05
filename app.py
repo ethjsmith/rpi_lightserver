@@ -287,10 +287,10 @@ def doEverything():
         elif request.args.get('arg') == "off":
             print("do thing 2")
             subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[2]])
-        elif request.args.get('arg') == "on1":
+        elif request.args.get('arg') == "cool":
             print("do thing 3")
             subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[3]])
-        elif request.args.get('arg') == "off1":
+        elif request.args.get('arg') == "heat":
             print("do thing 4")
             subprocess.call(['/usr/local/bin/rpi-rf_send',conf[0],conf[4]])
         else:
