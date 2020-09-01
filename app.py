@@ -271,7 +271,7 @@ def logout():
 @login_required
 @admin_required
 def control():
-    bdy = "<a href='/control/go?arg=on'>Light On</a><br><a href='/control/go?arg=off'>Light Off</a><br><a href='/control/go?arg=on1'>Fan On(This doesnt do anything)</a><br><a href='/control/go?arg=off1'>Fan Off( This ones doesn\'t either lol)</a><br></p>"
+    bdy = "<a href='/control/go?arg=on'>Light On</a><br><a href='/control/go?arg=off'>Light Off</a><br><a href='/control/go?arg=cool'>Fan On(This doesnt do anything)</a><br><a href='/control/go?arg=heat'>Fan Off( This ones doesn\'t either lol)</a><br></p>"
     return render_template("genericpage.html",body=bdy)
 
 # Protected NONPAGE route redirects control's output methods, running the actual scripts, and then redirecting back to the control page
