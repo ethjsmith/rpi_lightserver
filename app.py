@@ -113,6 +113,7 @@ class Target(db.Model):
         return self.date
 class Anon(AnonymousUserMixin):
     name = u"Not Logged in"
+    permission = 0
 login_manager = LoginManager()
 login_manager.anonymous_user = Anon
 login_manager.login_view = "login"
@@ -133,14 +134,7 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-# Checks if the user is an admin, currently does this by comparing the email address
-# this is probably not a great way to do this ...
-def is_admin():
-    #if current_user.email != 'a':
-    #print("current perms=" + current_user.permission)
-    if current_user.permission < 10:
-        return False
-    return True
+
 def admin_required(f):
     def wrap(*args, **kwargs):
         if current_user.email == 'ethan@esmithy.net':
@@ -173,14 +167,6 @@ def api_login(username, password):
                     flash("successful login for " + user.name,category='info')
                     return True
     return False
-    #     if request.method in EXEMPT_METHODS:
-    #         return f(*args, **kwargs)
-    #     elif current_app.config.get('LOGIN_DISABLED'):
-    #         return f(*args, **kwargs)
-    #     elif not current_user.is_authenticated:
-    #         return current_app.login_manager.unauthorized()
-    #     return f(*args, **kwargs)
-    # return decorated_view
 
 
 #Context processor makes functions and variable available to the app ( most importantly for my usage, the templates)
@@ -268,10 +254,15 @@ def logout():
 
 # Protected route control , allows admin users to control the lights, and other radio devices connected to the web host
 @ap.route('/control')
-@login_required
+@login_required_v2
 @admin_required
+# the fan terminology is kind of unintuative, "cool" basically means "fan on" and "heat" means "fan off"... they match the invocation intents in the skill
 def control():
-    bdy = "<a href='/control/go?arg=on'>Light On</a><br><a href='/control/go?arg=off'>Light Off</a><br><a href='/control/go?arg=cool'>Fan On(This doesnt do anything)</a><br><a href='/control/go?arg=heat'>Fan Off( This ones doesn\'t either lol)</a><br></p>"
+    bdy = """   <a href='/control/go?arg=on'>Light On</a>   <br>
+                <a href='/control/go?arg=off'>Light Off</a> <br>
+                <a href='/control/go?arg=cool'>Fan On</a>   <br>
+                <a href='/control/go?arg=heat'>Fan Off</a>  <br>
+    """
     return render_template("genericpage.html",body=bdy)
 
 # Protected NONPAGE route redirects control's output methods, running the actual scripts, and then redirecting back to the control page
@@ -369,13 +360,6 @@ def create():
             flash("error, missing required portion, or using invalid Image",category='error')
     return render_template('addArticle.html')
 
-# @ap.route('/newTopic/<path:topicname>', methods=['GET','POST'])
-# @login_required
-# def makeTopic(topicname):
-#     if is_admin() == False:
-#         return redirect('/')
-
-
 
 # admin delete driver, used for deleting any kind of content on the site
 # admin page redirects requests here
@@ -384,12 +368,8 @@ def create():
 # special case for the @ admin decorator
 @ap.route('/admin/<path:type>/<path:did>')
 @login_required
+@admin_required
 def admin_delete(type,did):
-    # TODO: rework the redirects they should now be obsolete
-    if is_admin() == False:
-        if type == 'comment':
-            return redirect('/deletecomment/' + did)
-        return redirect('/mypage')
     if type == "post":
         Comment.query.filter_by(article=did).delete()
         Post.query.filter_by(id=did).delete()
@@ -412,17 +392,16 @@ def admin_delete(type,did):
 
 # a delete function for users to delete their own comments
 
-# another special case for admins  ?  @@
 @ap.route('/deletecomment/<path:cid>')
 @login_required
 def user_delete_comment(cid):
     canDelete = False
-    if is_admin() == False:
+    if current_user.permission >= 10:
+        canDelete = True
+    else:
         e = Comment.query.filter_by(id=cid).first()
         if e.poster == current_user.id:
             canDelete = True
-    else:
-        canDelete = True
     if canDelete:
         nextd = Post.query.filter_by(id=e.article).first()
         db.session.delete(e)

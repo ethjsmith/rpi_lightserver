@@ -1,19 +1,19 @@
 <div class = "topnav">
-    <a href="/"{% if request.path == '/'%} class = 'current'{% endif %}>Home</a>
+    <a href="/"{% if request.path == '/' %} class = 'current'{% endif %}>Home</a>
     {% for topic in getTopics() %}
     <a href = "/{{topic.topic}}"{% if request.path == "/" + topic.topic %} class = 'current' {% endif %}> {{topic.topic}}</a>
 
     {% endfor %}
-    <a href = "/About"{% if request.path == '/About'%} class = 'current'{% endif %}>About Me</a>
+    <a href = "/About"{% if request.path == '/About' %} class = 'current'{% endif %}>About Me</a>
     <div style='float:right'>
-    {% if current_user.name == "Not Logged in"%}
-        <a href="/register"{% if request.path == '/register'%} class = 'current'{% endif %} >register</a>
-        <a href="/mypage"{% if request.path == '/mypage'%} class = 'current'{% endif %}  >{{current_user.name}} ⚙ </a>
+    {% if current_user.name == "Not Logged in" %}
+        <a href="/register"{% if request.path == '/register' %} class = 'current'{% endif %} >register</a>
+        <a href="/mypage"{% if request.path == '/mypage' %} class = 'current'{% endif %}  >{{current_user.name}} ⚙ </a>
 
     {% else %}
-        <a href="/mypage"{% if request.path == '/mypage'%} class = 'current'{% endif %} >{{current_user.name}} ⚙ </a>
+        <a href="/mypage"{% if request.path == '/mypage' %} class = 'current'{% endif %} >{{current_user.name}} ⚙ </a>
         {% include 'navadmin.html' %}
-        <a href="/logout"{% if request.path == '/logout'%} class = 'current'{% endif %} >logout</a>
+        <a href="/logout"{% if request.path == '/logout' %} class = 'current'{% endif %} >logout</a>
     {% endif %}
 </div>
 </div>
