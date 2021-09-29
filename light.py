@@ -2,7 +2,7 @@ import datetime, pytz,time,json,requests,os,sys
 from suntime import Sun, SunTimeException
 lat = 37.6963 # my exact address monkas
 lon = -113.0707
-margin = datetime.timedelta(seconds=90) # margin so that the light only turns on at the specific time, and not constantly after sunset
+margin = datetime.timedelta(seconds=60) # margin so that the light only turns on at the specific time, and not constantly after sunset
 
 def sendRequest(): # send a request to my server to turn the light on
     payload = {
@@ -15,21 +15,20 @@ def getSunsetTime():
     s = Sun(lat,lon)
     sunsetToday = s.get_local_sunset_time()
     sunsetToday += datetime.timedelta(days=1) # for some reason the day is off by one... so add one
-    print(f"Sunset Today at {sunsetToday.strftime('%H:%M')}")
+    print(f"Sunset: {sunsetToday.strftime('%d/%m/%y %H:%M')}")
     return sunsetToday
-try:
+try: # check if the arguments are set
     a = sys.argv[1]
-    #b = sys.argv[2]
 except:
     print("Please provide a user and password to authticate to the webserver as the program args  :) ")
     quit()
 while True:
     now = pytz.UTC.localize(datetime.datetime.now())
-    if 'sunsetToday' not in locals() or now.date() > sunsetToday.date():
+    if 'sunsetToday' not in locals() or now.date() > sunsetToday.date(): # if it's a new day, check when the new sunset is
         sunsetToday = getSunsetTime()
-    if now-margin <=  sunsetToday <= now+margin:
+    if sunsetToday-margin <=  now <= sunsetToday+margin: # if our time is within about a minute of the sunset time, turn on the light 
         print("Turn on! ")
         sendRequest()
     else:
         print("Don't Turn on! ")
-    time.sleep(60)# check once per minute if we are in the correct time range to turn on ...
+    time.sleep(60)# run only once per minute
