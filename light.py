@@ -10,18 +10,14 @@ def sendRequest(): # send a request to my server to turn the light on
         "password":sys.argv[2],
     }
     r = requests.get("https://ejsmith.hopto.org/control/go", params=payload)
-def getSunsetTime():
+def getSunsetTime(when=None):
     s = Sun(lat,lon)
-    today_really = datetime.datetime.now()
-
-    sunsetToday = s.get_sunset_time()
-    secondset = s.get_local_sunset_time(today_really)
-    sunsetToday += datetime.timedelta(days=1) # the day being off by one appears to be a known issue? it is more than a year old tho
-    print(f"Sunset: {sunsetToday.strftime('%d/%m/%y %H:%M')}")
-    print(f"Another Sunset: {secondset.strftime('%d/%m/%y %H:%M')}")
-    #truth = sunsetToday.replace(tzinfo=None)
-    return sunsetToday
-
+    if not when:
+        when = datetime.datetime.now()
+    sunsetToday = s.get_sunset_time(when)
+    r = sunsetToday + datetime.timedelta(days=1) # library has off by 1 day, unsure why ? ( known issue? )
+    print(f"Next sunset at: {r.strftime('%m/%d/%y %H:%M')}")
+    return r
 
 try: # check if the arguments are set
     a = sys.argv[1]
@@ -30,20 +26,17 @@ except:
     quit()
 while True:
     now = pytz.UTC.localize(datetime.datetime.utcnow())
-    #now = datetime.datetime.utcnow() # this is super garbage
-    #now = now.replace(tzinfo=None)
-    if 'sunsetToday' not in locals() or now.date() > sunsetToday.date(): # if it's a new day, check when the new sunset is
+        #now = now.replace(tzinfo=None)
+    if 'sunsetToday' not in locals(): # if it's a new day, check when the new sunset is
         sunsetToday = getSunsetTime()
     elapsed = sunsetToday- now # gives the amount of time between now and the sunset
-    print(f"elasped:: {elapsed}")
-    if -40 <= elapsed.total_seconds() <= 40 :# if our time is within about a minute of the sunset time, turn on the light
-        print("Turn on! ")
+    #print(f"elasped:: {elapsed}")
+    if elapsed.total_seconds() <= 40 :# if our time is within about a minute of the sunset time, turn on the light
+        print("SUNSET! activating...")
         sendRequest()
-    else:
-        print("Don't Turn on! ")
-    # the long list of debug functions currently
-    print(f"Time: {now.strftime('%d/%m/%y %H:%M')} and Sunset Time: {sunsetToday.strftime('%d/%m/%y %H:%M')}") # additional logging for debug sake ?
-    print(f"unformatted time: {now} and sunset: {sunsetToday}")
-    print(f"delta: {elapsed} and remaining seconds: {elapsed.total_seconds()}")
-    print(f"elapsed = {elapsed} or total seconds {elapsed.total_seconds()}")
+        # set the next sunset to tomorrow?
+        sunsetToday = getSunsetTime(datetime.datetime.now() + datetime.timedelta(days=1))
+    print("")
+    print(f"Time: {now.strftime('%m/%d %H:%M')}     Sunset: {sunsetToday.strftime('%m/%d %H:%M')}") # additional logging for debug sake ?
+    print(f"remaining seconds until next sunset: {int(elapsed.total_seconds())}")
     time.sleep(5)# run only once per minute
