@@ -4,12 +4,17 @@ lat = 37.69
 lon = -113.07
 
 def sendRequest(): # send a request to my server to turn the light on
-    payload = {
-        "arg":"on",
-        "user":sys.argv[1],# saved as args because I don't want to add a file to github with my login stuff, and my server isn't configured to use a token or anything :(
-        "password":sys.argv[2],
-    }
-    r = requests.get("https://ejsmith.hopto.org/control/go", params=payload)
+    try:
+        payload = {
+            "arg":"on",
+            "user":sys.argv[1],# saved as args because I don't want to add a file to github with my login stuff, and my server isn't configured to use a token or anything :(
+            "password":sys.argv[2],
+        }
+        r = requests.get("https://ejsmith.hopto.org/control/go", params=payload)
+        return True
+    except:
+        print("Unable to contact server, continuing")
+        return False
 def getSunsetTime(when=None):
     s = Sun(lat,lon)
     if not when:
@@ -39,4 +44,4 @@ while True:
     print("")
     print(f"Time: {now.strftime('%m/%d %H:%M')}     Sunset: {sunsetToday.strftime('%m/%d %H:%M')}") # additional logging for debug sake ?
     print(f"remaining seconds until next sunset: {int(elapsed.total_seconds())}")
-    time.sleep(5)# run only once per minute
+    time.sleep(60)# run only once per minute
