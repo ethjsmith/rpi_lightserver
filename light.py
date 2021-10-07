@@ -38,10 +38,10 @@ while True:
     #print(f"elasped:: {elapsed}")
     if elapsed.total_seconds() <= 40 :# if our time is within about a minute of the sunset time, turn on the light
         print("SUNSET! activating...")
+        print("")
+        print(f"Time: {now.strftime('%m/%d %H:%M')}     Sunset: {sunsetToday.strftime('%m/%d %H:%M')}") # additional logging for debug sake ?
+        print(f"remaining seconds until next sunset: {int(elapsed.total_seconds())}")
         sendRequest()
         # set the next sunset to tomorrow?
         sunsetToday = getSunsetTime(datetime.datetime.now() + datetime.timedelta(days=1))
-    print("")
-    print(f"Time: {now.strftime('%m/%d %H:%M')}     Sunset: {sunsetToday.strftime('%m/%d %H:%M')}") # additional logging for debug sake ?
-    print(f"remaining seconds until next sunset: {int(elapsed.total_seconds())}")
     time.sleep(60)# run only once per minute
