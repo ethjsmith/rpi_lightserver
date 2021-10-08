@@ -17,13 +17,16 @@ def sendRequest(): # send a request to my server to turn the light on
         return False
 def getSunsetTime(when=None):
     s = Sun(lat,lon)
-    if not when:
+    if when is None:
         when = datetime.datetime.now()
     sunsetToday = s.get_sunset_time(when)
-    r = sunsetToday + datetime.timedelta(days=1) # library has off by 1 day, unsure why ? ( known issue? )
-    print(f"Next sunset at: {r.strftime('%m/%d/%y %H:%M')}")
-    return r
-
+    sunsetToday = sunsetToday + datetime.timedelta(days=1)# library has off by 1 day, unsure why ? ( known issue? )
+    print(f"Next sunset at: {sunsetToday.strftime('%m/%d/%y %H:%M')}")
+    return sunsetToday
+def iterate(now): # a test function for making time move a little faster than real-time
+    now += datetime.timedelta(hours=10)
+    print(f" now: {now.strftime('%m/%d %H:%M')}")
+    return now
 try: # check if the arguments are set
     a = sys.argv[1]
 except:
@@ -31,7 +34,6 @@ except:
     quit()
 while True:
     now = pytz.UTC.localize(datetime.datetime.utcnow())
-        #now = now.replace(tzinfo=None)
     if 'sunsetToday' not in locals(): # if it's a new day, check when the new sunset is
         sunsetToday = getSunsetTime()
     elapsed = sunsetToday- now # gives the amount of time between now and the sunset
@@ -43,5 +45,6 @@ while True:
         print(f"remaining seconds until next sunset: {int(elapsed.total_seconds())}")
         sendRequest()
         # set the next sunset to tomorrow?
-        sunsetToday = getSunsetTime(datetime.datetime.now() + datetime.timedelta(days=1))
+        sunsetToday = getSunsetTime(now) # testing this removed ?
     time.sleep(60)# run only once per minute
+    #now = iterate(now)
