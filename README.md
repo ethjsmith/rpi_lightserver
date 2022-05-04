@@ -1,55 +1,42 @@
-Flask user : a dynamic flask site with users, and a database to store both users and articles. (this is basically the staging/building area for a huge upgrade to rpi_lightserver)
+# RPI lightserver
+a project I made to host my own website, with a bunch of backend functionality, like controlling the IOT lights in my house. Also doubles as a blog ( when I bother to write articles for it )
 
-(must be python3)
-run `python vanilla.py`
+## Requirements
+Python 3
 
-required installs : Flask, flask_login, flask_sqlachemy
-
- ===TODO===
-. moves sensitive information (secret_key) into an  external config not saved in GitHub
-.restructure the various functions that require admin power to use ( like video?)
-Standardize naming conventions ( specifically Post/Article)
-improve ability to add paragraphs to articles ?
-== BUGS ==
-. better admin security ?
-# deploy
-
-==QOL==
-. WTF forms
-. db link between articles(/content) and users
-
-== Minor ==
-. generictemplate.html rework to markup object instead of `|safe` variable ( possible security)
-
-
-==admin functionality==
-.manage Users
-
-currently you can create and load the database like this :
+#### Packages:
+- Flask
+- flask_login
+- flask_sqlalchemy
+#### Programs:
+ [rpi_rf](https://github.com/milaq/rpi-rf) is the program I use to send rf signals. it really simplifies the process, and it works great.
+#### Config File:
+Create a file called secret.py, which contains values for configuring the RF sender module, and the IO pin that the transmitter is connected to, as well as a secret key. Attached is an example config.
 ```python
-from app import User,Post,Comment,Anon,Target
-from app import db
+def system():
+	key="""qwerty"""
+	return key
+def config():
+        # This is the GPIO data pin that is connected to the RF sender module
+        rpi_gpio_pin = '21'
+        # These are the codes sent by the RPI to toggle lights
+        outlet1on = '1655303'
+        outlet1off = '1655302'
+        # there should be 2 codes per light, one for on, and one for off ( if it works like mine does )
+        outlet2on = '6832647'
+        outlet2off = '6832646'
 
-db.create_all()
-#two example users
-b = User(name='test',password='pass',email='test@b.c')
-a = User(name='ethan',password='password',email='a',permission=999)
-# add and save the users
-db.session.add(a)
-db.session.add(b)
-db.session.commit()
-#example of an article
-p1 = Post(topic="misc",title="Example Article",picture="/static/Pic.jpg",body="This is the body of the article, which accepts <i> HTML tags </i>")
-p2 = Post(topic="misc",title="Ex2",picture="/static/Pic.jpg",body="some random placeholder text here please")
-p3 = Post(topic="a new topic appears",title="Example Article",picture="/static/Pic.jpg",body="I yote a duck off a cliff... turns out they can fly, so everything was fine")
-
-db.session.add(p1)
-db.session.add(p2)
-db.session.add(p3)
-db.session.commit()
-#c = Comment(title='test',message='I love testing',poster="testman",article=1)
-#db.session.add(c)
-db.session.commit()
-quit()
+        return [rpi_gpio_pin,outlet1on,outlet1off,outlet2on,outlet2off]
 ```
-( this is literally the script I use to recreate the database every time I break it or have to make a migrating change )
+#### Database setup:
+currently you can create and load the database with some defaults by running the `initalize_db.py` file
+
+## TOD0
+- [ ] rework site style, and add more templates for generic pages.
+- [ ] Standardize naming conventions ( specifically Post/Article)
+- [ ] improve ability to add paragraphs to articles ?
+- [ ] look into/ implement WTF forms
+- [ ] add logical db link between articles(content) and users
+- [ ] give admins better ability to manage users
+## Known/tracked bugs
+- [ ] generictemplate.html rework to markup object instead of `|safe` variable ( possible security)
