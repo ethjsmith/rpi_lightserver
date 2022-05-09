@@ -1,18 +1,20 @@
 <br>
 <h3> Comments </h3>
+{% if current_user.name != "Not Logged in"%}
+    {% include 'addcomment.html' %}
+{% endif %}
 {% for c in getComments(pidd) %}
     <div class = "card">
-        <h4> {{c.title}} </h4><br>
-        {{c.message}}<br>
-        <b>{{c.postername}}</b> Posted this on : <b>{{c.date}}</b>
+        <b> {{c.title}} </b><br>
+        <p style="margin:auto;width:50%;">{{c.message}}</p><br>
+        <p style = "float:right;">
+          Posted by <b>{{c.postername}}</b> on: <b>{{c.date}}</b>
         {% if current_user.permission > 9 %}
             <a href='/admin/comment/{{c.id}}'>Delete</a>
         {% elif current_user.id == c.poster %}
             <a href = '/deletecomment/{{c.id}}'> Delete </a>
         {% endif %}
+        </p><br>
     </div><br>
 {% endfor %}
 <br>
-{% if current_user.name != "Not Logged in"%}
-    {% include 'addcomment.html' %}
-{% endif %}

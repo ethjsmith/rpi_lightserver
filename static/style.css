@@ -25,6 +25,8 @@
 }
 .card {
   background-color: white;
+  border:3px solid #333;
+  border-radius: 10px;
   padding: 20px;
 }
 .error {
@@ -43,7 +45,10 @@
 body {
   background-color: #f1f1f1;
   font-family: Arial;
-  padding: 10px;
+}
+.c {
+  width:75%;
+  margin:auto;
 }
 h1 {
   text-align: center;
@@ -68,6 +73,8 @@ h2,h3,h6 {
 .preview {
   padding:20px;
   background-color:white;
+  border:3px solid #333;
+  border-radius: 10px;
 }
 .preview img {
   float:left;
@@ -133,3 +140,23 @@ h2,h3,h6 {
 .dropd:hover .dropc {
   display: block;
 }
+input {
+  padding:10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 15px 4px rgba(0,0,0,0.06);
+
+}
+form {
+  text-align: center;
+  margin:auto;
+  width:50%;
+  border:3px solid #333;
+  border-radius: 10px;
+}
+form input {
+  width:50%;
+}
+/* input[type="text"] {
+  width:50%;
+} */

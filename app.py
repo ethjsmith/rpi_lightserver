@@ -114,14 +114,12 @@ def home():
     z = 'user:' + current_user.name
     if isinstance(current_user,Anon):
         z += '<br>is anon'
-    return render_template('genericpage.html',title='home',body='Welcome to the homepage')
+    return render_template('homepage.html',title='Home')
 
 @ap.route('/About')
-@login_required_v2
+#@login_required_v2
 def about_page():
-    '''About route, this is a legacy page, which doesn't scale like the other pages.'''
-    k = '''<h1>About Me</h1><br><p>My name is Ethan Smith, and I am a CSIS student at Southern Utah University. at SUU I am also the Vice President of the cyber defence (competition) club, and a student security analyst. I love programming ( prefer Python and Java), Snowboarding during the winter, and playing lots of different video games. I also enjoy homemade IOT devices, and <br> <a href="mailto:ethan@esmithy.net">Contact me</a> </p> <p> About the site: <br> This site was built as a project, just something that I like to play around with when I have some downtime between work and school. I had the idea to make a website which instead of having static html files and PHP templates, would use python to generate all the pages by chaining together string variables containing bits of html, which altogether would generate web pages. I've done a lot of things to try and make the site scalable, instead of static, and I've really enjoyed putting it together, although writing html with python syntax highlighting can be a pain sometimes! </p>'''
-    return render_template('genericpage.html',title='About',body=k)
+    return render_template('resume.html',title='Resume')
 
 @ap.route('/register', methods=['GET','POST'])
 def register():
