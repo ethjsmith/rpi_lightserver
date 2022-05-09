@@ -7,12 +7,12 @@ db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
     '''User database model, created by new user (name,password,email)'''
-    __tablename__ = "User"
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(100))
-    comments = db.relationship('Comment', backref ='usr', lazy='dynamic', primaryjoin="User.id == Comment.poster")
+    comments = db.relationship('Comment', backref ='usr', lazy='dynamic', primaryjoin='User.id == Comment.poster')
     permission = db.Column(db.Integer)
 
     def __init__(self,name,password,email,permission=0):
@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
         self.password = self.set_password(password)
         self.email = email
         self.permission = permission
-        if self.email == "ethan@esmithy.net": # this is kind of hacky :)
+        if self.email == 'ethan@esmithy.net': # this is kind of hacky :)
             self.permission = 999
     def is_active(self):
         return True
@@ -43,7 +43,7 @@ class User(UserMixin, db.Model):
 
 class Comment(db.Model):
     '''Comment Database model, has more complicated foriegn keys, and so should only be created by the scripts attacked to the /?/? post route'''
-    __tablename__ = "Comment"
+    __tablename__ = 'Comment'
     id= db.Column(db.Integer, primary_key= True)
     title = db.Column(db.String())
     message = db.Column(db.String())
@@ -61,7 +61,7 @@ class Comment(db.Model):
         self.date = datetime.date.today().strftime('%b %d, %Y')
 
 class Post(db.Model):
-    __tablename__ = "Post"
+    __tablename__ = 'Post'
     id = db.Column(db.Integer, primary_key=True)
     topic = db.Column(db.String())
     title = db.Column(db.String())
@@ -78,10 +78,10 @@ class Post(db.Model):
         self.getFirstParagraph()
         self.date = datetime.date.today().strftime('%b %d, %Y')
     def getFirstParagraph(self):
-        self.para = str(self.body.split("</p>")[0])
-# This is the database entry for the data stored in the "attacks " page
+        self.para = str(self.body.split('</p>')[0])
+# This is the database entry for the data stored in the 'attacks ' page
 class Target(db.Model):
-    __tablename__ = "Target"
+    __tablename__ = 'Target'
     id= db.Column(db.Integer, primary_key= True)
     data = db.Column(db.String())
     date = db.Column(db.String())
@@ -94,5 +94,5 @@ class Target(db.Model):
     def __str__(self):
         return self.date
 class Anon(AnonymousUserMixin):
-    name = u"Not Logged in"
+    name = u'Not Logged in'
     permission = 0
