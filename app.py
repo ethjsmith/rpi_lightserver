@@ -2,6 +2,7 @@ import os
 import subprocess
 import datetime
 import hashlib
+import socket
 
 import flask_login
 
@@ -19,8 +20,10 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import db,User, Comment, Post, Target, Anon
-
-#Camera = import_module('camera_pi').Camera
+if socket.gethostname() == 'raspberrypiweb':
+    Camera = import_module('camera_pi').Camera
+else:
+    Camera = None # camera doesn't exist in the testing env, but isn't accessed unless you're testing the camera section 
 ap = Flask(__name__)
 ap.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 ap.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -174,10 +177,10 @@ def control():
     The fan terminology is kind of unintuative, 'cool' basically means 'fan on' and 'heat' means 'fan off'... they match the invocation intents in the skill.
     '''
 
-    bdy = '''   <a href='/control/go?arg=on'>Light On</a>   <br>
-                <a href='/control/go?arg=off'>Light Off</a> <br>
-                <a href='/control/go?arg=cool'>Fan On</a>   <br>
-                <a href='/control/go?arg=heat'>Fan Off</a>  <br>
+    bdy = '''   <a class='control_button' href='/control/go?arg=on'>Light On</a>   <br>
+                <a class='control_button' href='/control/go?arg=off'>Light Off</a> <br>
+                <a class='control_button' href='/control/go?arg=cool'>Fan On</a>   <br>
+                <a class='control_button' href='/control/go?arg=heat'>Fan Off</a>  <br>
     '''
     return render_template('genericpage.html',body=bdy)
 

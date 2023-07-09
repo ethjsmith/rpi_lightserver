@@ -1,0 +1,11 @@
+[Unit]
+Description=Light control service
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 /home/pi/rpi_lightserver/light.py a b 
+
+[Install]
+WantedBy=multi-user.target

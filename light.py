@@ -3,7 +3,14 @@ from suntime import Sun, SunTimeException
 lat = 37.69
 lon = -113.07
 
-def sendRequest(): # send a request to my server to turn the light on
+def sendRequest():
+    rpi_gpio_pin = '21'
+    outlet1on = '1655303'
+    subprocess.call(['/usr/local/bin/rpi-rf_send',rpi_gpio_pin,outlet1on])
+
+
+def sendWebRequest(): # send a request to my server to turn the light on, works best if the script is not running on the local network. 
+# man I love not having a line limit LOL 
     try:
         payload = {
             'arg':'on',
@@ -21,11 +28,11 @@ def getSunsetTime(when=None):
         when = datetime.datetime.now()
     sunsetToday = s.get_sunset_time(when)
     sunsetToday = sunsetToday + datetime.timedelta(days=1)# library has off by 1 day, unsure why ? ( known issue? )
-    print(f'Next sunset at: {sunsetToday.strftime('%m/%d/%y %H:%M')}')
+    print(f'Next sunset at: {sunsetToday.strftime("%m/%d/%y %H:%M")}')
     return sunsetToday
 def iterate(now): # a test function for making time move a little faster than real-time
     now += datetime.timedelta(hours=10)
-    print(f' now: {now.strftime('%m/%d %H:%M')}')
+    print(f' now: {now.strftime("%m/%d %H:%M")}')
     return now
 try: # check if the arguments are set
     a = sys.argv[1]
@@ -41,7 +48,7 @@ while True:
     if elapsed.total_seconds() <= 40 :# if our time is within about a minute of the sunset time, turn on the light
         print('SUNSET! activating...')
         print('')
-        print(f'Time: {now.strftime('%m/%d %H:%M')}     Sunset: {sunsetToday.strftime('%m/%d %H:%M')}') # additional logging for debug sake ?
+        print(f'Time: {now.strftime("%m/%d %H:%M")}     Sunset: {sunsetToday.strftime("%m/%d %H:%M")}') # additional logging for debug sake ?
         print(f'remaining seconds until next sunset: {int(elapsed.total_seconds())}')
         sendRequest()
         # set the next sunset to tomorrow?
