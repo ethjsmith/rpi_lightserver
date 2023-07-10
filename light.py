@@ -1,10 +1,11 @@
 import datetime, pytz,time,json,requests,os,sys
 from suntime import Sun, SunTimeException
+import subprocess
 lat = 37.69
 lon = -113.07
 
 def sendRequest():
-    rpi_gpio_pin = '21'
+    rpi_gpio_pin = '-g 21'
     outlet1on = '1655303'
     subprocess.call(['/usr/local/bin/rpi-rf_send',rpi_gpio_pin,outlet1on])
 
@@ -54,4 +55,3 @@ while True:
         # set the next sunset to tomorrow?
         sunsetToday = getSunsetTime(now) # testing this removed ?
     time.sleep(60)# run only once per minute
-    #now = iterate(now)
